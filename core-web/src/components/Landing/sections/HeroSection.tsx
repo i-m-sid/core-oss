@@ -1,16 +1,21 @@
 import { useRef, useEffect, useState } from "react";
 import { HERO } from "../constants/landingData";
 import { MainDemo } from "../components/DemoSection";
+import MobileDemo, { type MobileView } from "../components/DemoSection/MobileDemo";
+import MobileInboxView from "../components/DemoSection/MobileInboxView";
+import MobileEmailView from "../components/DemoSection/MobileEmailView";
+import MobileChatView from "../components/DemoSection/MobileChatView";
+import MobileCalendarView from "../components/DemoSection/MobileCalendarView";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
 }
 
-// Scales the fixed-size MainDemo to always fill its container width
-function MobileScaledDemo() {
+// Scales the fixed-size MainDemo down to fill its container on desktop
+function ScaledDesktopDemo() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const DEMO_W = 1280; // px — intrinsic width MainDemo expects
+  const DEMO_W = 1280;
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -31,11 +36,21 @@ function MobileScaledDemo() {
   );
 }
 
+// Renders the correct view for the active mobile tab
+function renderMobileView(view: MobileView) {
+  switch (view) {
+    case "inbox":    return <MobileInboxView />;
+    case "email":    return <MobileEmailView />;
+    case "chat":     return <MobileChatView />;
+    case "calendar": return <MobileCalendarView />;
+  }
+}
+
 export default function HeroSection({ onGetStarted }: HeroSectionProps) {
   return (
     <section className="relative w-full overflow-x-hidden font-geist bg-black">
 
-      {/* ── Background video ── */}
+      {/* Background video */}
       <div
         className="pointer-events-none absolute top-0 left-1/2 z-0 h-full w-screen -translate-x-1/2 overflow-hidden"
         style={{ opacity: 1 }}
@@ -52,7 +67,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
       </div>
 
-      {/* ── Content ── */}
+      {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-start pt-28 md:pt-40 pb-6 px-4 md:px-6">
 
         {/* Heading */}
@@ -86,9 +101,17 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
           </button>
         </div>
 
-        {/* Demo — CSS scale trick: shrinks the 780px-tall demo to fit any viewport */}
+        {/* Demo */}
         <div className="w-full max-w-375">
-          <MobileScaledDemo />
+          {/* Mobile: purpose-built layout */}
+          <div className="md:hidden">
+            <MobileDemo renderView={renderMobileView} />
+          </div>
+
+          {/* Desktop: scaled-down full demo */}
+          <div className="hidden md:block">
+            <ScaledDesktopDemo />
+          </div>
         </div>
 
       </div>
