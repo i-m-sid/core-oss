@@ -4,6 +4,7 @@ import {
   AI_CHAT_STEPS,
   AI_CHAT_ACTIONS,
   type AIChatActionKey,
+  type AIChatAction,
 } from "../../constants/featuresData";
 
 // ── Color maps ────────────────────────────────────────────────────────────
@@ -81,6 +82,62 @@ function ActionIcon({ actionKey, color }: { actionKey: AIChatActionKey; color: s
   }
 }
 
+// ── Action card sub-component ─────────────────────────────────────────────
+
+type ActionCardProps = {
+  action: AIChatAction;
+  isActive: boolean;
+  isDone: boolean;
+};
+
+function ActionCard({ action, isActive, isDone }: ActionCardProps) {
+  return (
+    <div
+      className="rounded-xl border p-4 transition-all duration-500"
+      style={{
+        background: isActive ? "#18191c" : "#141517",
+        borderColor: isActive ? BORDER_ACTIVE[action.color] : "rgba(255,255,255,0.05)",
+        boxShadow: isActive ? SHADOW_ACTIVE[action.color] : "none",
+        opacity: isActive ? 1 : 0.3,
+        transform: isActive ? "translateY(-4px) scale(1.02)" : "translateY(0) scale(1)",
+      }}
+    >
+      {/* Card header */}
+      <div className="flex items-center gap-2 mb-4">
+        <div
+          className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
+          style={{ background: ICON_BG[action.color] }}
+        >
+          <ActionIcon actionKey={action.key} color={action.color} />
+        </div>
+        <span className="text-[12px] font-medium text-[#c8c8cc]">{action.key}</span>
+      </div>
+
+      {/* Done badge */}
+      <div
+        className="text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 transition-all duration-300"
+        style={{
+          background: isDone ? ICON_BG[action.color] : "rgba(255,255,255,0.04)",
+          color: isDone ? ICON_COLOR[action.color] : "#3a3a40",
+        }}
+      >
+        {isDone && (
+          <svg width="8" height="8" viewBox="0 0 16 16" fill="none">
+            <polyline points="3 8 6.5 11.5 13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        )}
+        {isDone ? action.doneLabel : "Waiting"}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-4 flex justify-between font-mono text-[10px]" style={{ color: "#404048" }}>
+        <span>{action.footerLeft}</span>
+        <span style={{ color: isDone ? ICON_COLOR[action.color] : "#404048" }}>{action.footerRight}</span>
+      </div>
+    </div>
+  );
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────
 
 type Phase = "typing" | "sending" | "result";
@@ -127,7 +184,7 @@ export default function AIChatCard() {
 
   return (
     <motion.div
-      className="col-span-1 md:col-span-2 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#111213] p-7"
+      className="col-span-1 md:col-span-2 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#111213] p-5 md:p-8"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -146,108 +203,45 @@ export default function AIChatCard() {
         </div>
       </div>
 
-      {/* Interactive area */}
-      <div className="relative flex items-center justify-center py-8">
-        <div className="relative w-full max-w-[860px] h-[380px]">
+      {/* ── Mobile layout ── */}
+      <div className="md:hidden mt-6 mb-2">
 
-          {/* Prompt box — centered */}
-          <div
-            className="absolute top-1/2 left-1/2 z-40 w-[340px] -translate-x-1/2 -translate-y-[calc(100%+12px)] rounded-2xl border border-white/[0.08] bg-[#1a1b1e]/90 backdrop-blur-xl"
-            style={{
-              boxShadow: phase === "result"
-                ? "0 16px 48px rgba(0,0,0,0.6)"
-                : "0 4px 16px rgba(0,0,0,0.4)",
-              transition: "box-shadow 400ms",
-            }}
-          >
-            {/* Cube AI label */}
-            <div className="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-white/[0.05]">
-              <img src="/cube-logo-white.svg" alt="Cube" className="w-3 h-3 opacity-50" />
-              <span className="text-[11px] font-medium text-[#505058]">Cube AI</span>
-              <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            </div>
+        {/* Cards + absolutely centered prompt box */}
+        <div className="relative">
 
-            <div className="relative min-h-[90px] p-4">
-              <p className="text-[14px] leading-relaxed text-[#e0e0e4] font-medium whitespace-pre-wrap">
-                {typedPrompt}
-                {phase === "typing" && (
-                  <span className="ml-0.5 inline-block h-[18px] w-[2px] animate-pulse bg-indigo-400 align-text-bottom rounded-full" />
-                )}
-              </p>
-
-              {/* Send button */}
-              <div className="absolute right-3 bottom-3">
-                <div
-                  className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200"
-                  style={{
-                    background: typedPrompt ? "#fff" : "rgba(255,255,255,0.06)",
-                    transform: phase === "sending" ? "scale(0.88)" : "scale(1)",
-                  }}
-                >
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={typedPrompt ? "#000" : "#505058"} strokeWidth="2.5" strokeLinecap="round">
-                    <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Action cards — fanned around the prompt */}
-          {AI_CHAT_ACTIONS.map((action, i) => {
-            const isActive  = action.key === step.activeCard && phase !== "typing";
-            const isDone    = action.key === step.activeCard && phase === "result";
-
-            // Distribute cards in a loose arc below the prompt
-            const positions = [
-              "absolute top-[54%] left-[1%]",
-              "absolute top-[54%] left-[21%]",
-              "absolute top-[54%] left-[41%]",
-              "absolute top-[54%] left-[61%]",
-              "absolute top-[54%] left-[80%]",
-            ];
-
+          {/* Cards — 2-col grid in background */}
+          <div className="grid grid-cols-2 gap-2.5">
+          {AI_CHAT_ACTIONS.map((action) => {
+            const isActive = action.key === step.activeCard && phase !== "typing";
+            const isDone   = action.key === step.activeCard && phase === "result";
             return (
               <div
                 key={action.key}
-                className={`w-[148px] rounded-xl border p-3.5 transition-all duration-500 ${positions[i]}`}
+                className="rounded-xl border p-3.5 transition-all duration-500"
                 style={{
                   background: isActive ? "#18191c" : "#141517",
                   borderColor: isActive ? BORDER_ACTIVE[action.color] : "rgba(255,255,255,0.05)",
                   boxShadow: isActive ? SHADOW_ACTIVE[action.color] : "none",
                   opacity: isActive ? 1 : 0.28,
-                  transform: isActive ? "translateY(-6px) scale(1.02)" : "translateY(0) scale(0.97)",
+                  transform: isActive ? "translateY(-3px) scale(1.02)" : "translateY(0) scale(1)",
                 }}
               >
-                {/* Card header */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-5 h-5 rounded-md flex items-center justify-center"
-                      style={{ background: ICON_BG[action.color] }}
-                    >
-                      <ActionIcon actionKey={action.key} color={action.color} />
-                    </div>
-                    <span className="text-[11.5px] font-medium text-[#c8c8cc]">{action.key}</span>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0" style={{ background: ICON_BG[action.color] }}>
+                    <ActionIcon actionKey={action.key} color={action.color} />
                   </div>
+                  <span className="text-[11px] font-medium text-[#c8c8cc]">{action.key}</span>
                 </div>
-
-                {/* Done badge */}
                 <div
                   className="text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 transition-all duration-300"
                   style={{
-                    background: isDone ? `${ICON_BG[action.color]}` : "rgba(255,255,255,0.04)",
+                    background: isDone ? ICON_BG[action.color] : "rgba(255,255,255,0.04)",
                     color: isDone ? ICON_COLOR[action.color] : "#3a3a40",
                   }}
                 >
-                  {isDone && (
-                    <svg width="8" height="8" viewBox="0 0 16 16" fill="none">
-                      <polyline points="3 8 6.5 11.5 13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  )}
+                  {isDone && <svg width="7" height="7" viewBox="0 0 16 16" fill="none"><polyline points="3 8 6.5 11.5 13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>}
                   {isDone ? action.doneLabel : "Waiting"}
                 </div>
-
-                {/* Footer */}
                 <div className="mt-3 flex justify-between font-mono text-[10px]" style={{ color: "#404048" }}>
                   <span>{action.footerLeft}</span>
                   <span style={{ color: isDone ? ICON_COLOR[action.color] : "#404048" }}>{action.footerRight}</span>
@@ -255,6 +249,124 @@ export default function AIChatCard() {
               </div>
             );
           })}
+          </div>
+
+          {/* Prompt box — absolutely centered over the card grid */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div
+              className="pointer-events-auto w-[220px] rounded-2xl border border-white/[0.10] bg-[#1a1b1e]/95 backdrop-blur-xl"
+              style={{
+                boxShadow: phase === "result" ? "0 16px 48px rgba(0,0,0,0.65)" : "0 6px 24px rgba(0,0,0,0.5)",
+                transition: "box-shadow 400ms",
+              }}
+            >
+              <div className="flex items-center gap-2 px-3 pt-3 pb-2 border-b border-white/[0.05]">
+                <img src="/cube-logo-white.svg" alt="Cube" className="w-2.5 h-2.5 opacity-50" />
+                <span className="text-[10.5px] font-medium text-[#505058]">Cube AI</span>
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              </div>
+              <div className="relative p-3 pb-10 min-h-[68px]">
+                <p className="text-[12px] leading-relaxed text-[#e0e0e4] font-medium whitespace-pre-wrap">
+                  {typedPrompt}
+                  {phase === "typing" && (
+                    <span className="ml-0.5 inline-block h-[15px] w-[1.5px] animate-pulse bg-indigo-400 align-text-bottom rounded-full" />
+                  )}
+                </p>
+                <div className="absolute right-3 bottom-3">
+                  <div
+                    className="w-7 h-7 rounded-xl flex items-center justify-center transition-all duration-200"
+                    style={{
+                      background: typedPrompt ? "#fff" : "rgba(255,255,255,0.06)",
+                      transform: phase === "sending" ? "scale(0.88)" : "scale(1)",
+                    }}
+                  >
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={typedPrompt ? "#000" : "#505058"} strokeWidth="2.5" strokeLinecap="round">
+                      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* ── Desktop layout ── */}
+      <div className="hidden md:flex items-center justify-center py-24 px-4">
+        <div className="relative w-full max-w-[820px]">
+
+          {/* Card grid: 3 top */}
+          <div className="grid grid-cols-3 gap-5 mb-6">
+            {AI_CHAT_ACTIONS.slice(0, 3).map((action) => {
+              const isActive = action.key === step.activeCard && phase !== "typing";
+              const isDone   = action.key === step.activeCard && phase === "result";
+              return (
+                <ActionCard
+                  key={action.key}
+                  action={action}
+                  isActive={isActive}
+                  isDone={isDone}
+                />
+              );
+            })}
+          </div>
+
+          {/* Bottom row: 2 cards flanking the prompt */}
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-5 items-center">
+            {(() => {
+              const action   = AI_CHAT_ACTIONS[3];
+              const isActive = action.key === step.activeCard && phase !== "typing";
+              const isDone   = action.key === step.activeCard && phase === "result";
+              return <ActionCard key={action.key} action={action} isActive={isActive} isDone={isDone} />;
+            })()}
+
+            {/* Prompt box */}
+            <div
+              className="z-40 w-[320px] rounded-2xl border border-white/[0.08] bg-[#1a1b1e]/90 backdrop-blur-xl"
+              style={{
+                boxShadow: phase === "result"
+                  ? "0 16px 48px rgba(0,0,0,0.6)"
+                  : "0 4px 16px rgba(0,0,0,0.4)",
+                transition: "box-shadow 400ms",
+              }}
+            >
+              <div className="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-white/[0.05]">
+                <img src="/cube-logo-white.svg" alt="Cube" className="w-3 h-3 opacity-50" />
+                <span className="text-[11px] font-medium text-[#505058]">Cube AI</span>
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              </div>
+              <div className="relative min-h-[100px] p-4 pb-12">
+                <p className="text-[14px] leading-relaxed text-[#e0e0e4] font-medium whitespace-pre-wrap">
+                  {typedPrompt}
+                  {phase === "typing" && (
+                    <span className="ml-0.5 inline-block h-[18px] w-[2px] animate-pulse bg-indigo-400 align-text-bottom rounded-full" />
+                  )}
+                </p>
+                <div className="absolute right-3 bottom-3">
+                  <div
+                    className="w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200"
+                    style={{
+                      background: typedPrompt ? "#fff" : "rgba(255,255,255,0.06)",
+                      transform: phase === "sending" ? "scale(0.88)" : "scale(1)",
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={typedPrompt ? "#000" : "#505058"} strokeWidth="2.5" strokeLinecap="round">
+                      <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {(() => {
+              const action   = AI_CHAT_ACTIONS[4];
+              const isActive = action.key === step.activeCard && phase !== "typing";
+              const isDone   = action.key === step.activeCard && phase === "result";
+              return <ActionCard key={action.key} action={action} isActive={isActive} isDone={isDone} />;
+            })()}
+          </div>
         </div>
       </div>
     </motion.div>

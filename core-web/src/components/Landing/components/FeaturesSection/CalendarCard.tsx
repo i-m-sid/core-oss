@@ -1,78 +1,64 @@
-import { useState, useEffect } from "react";
-import { motion } from "motion/react";
-import { QUICK_ADD_STEPS } from "../../constants/featuresData";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
-// ── Palette ───────────────────────────────────────────────────────────────────
+// ── Source data ────────────────────────────────────────────────────────────────
 
-const PALETTE = {
-  indigo:  { border: "#6366f1", grad: "rgba(99,102,241,0.18),rgba(99,102,241,0.05)", ring: "rgba(99,102,241,0.12)", text: "#a5b4fc" },
-  emerald: { border: "#34d399", grad: "rgba(52,211,153,0.15),rgba(52,211,153,0.04)", ring: "rgba(52,211,153,0.10)", text: "#6ee7b7" },
-  teal:    { border: "#2dd4bf", grad: "rgba(45,212,191,0.15),rgba(45,212,191,0.04)", ring: "rgba(45,212,191,0.10)", text: "#5eead4" },
-} as const;
+const SOURCES = [
+  {
+    name:    "Gmail",
+    color:   "#EA4335",
+    bgColor: "rgba(234,67,53,0.10)",
+    title:   "Re: Design review notes",
+    meta:    "from Meet · 2 min ago",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+        <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z" fill="rgba(234,67,53,0.15)" stroke="#EA4335" strokeWidth="1.5"/>
+        <path d="M22 6l-10 7L2 6" stroke="#EA4335" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
+    name:    "Calendar",
+    color:   "#4285F4",
+    bgColor: "rgba(66,133,244,0.10)",
+    title:   "Design Review · 11:00 AM",
+    meta:    "1 hour · Google Meet link",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="4" width="18" height="18" rx="2" fill="rgba(66,133,244,0.15)" stroke="#4285F4" strokeWidth="1.5"/>
+        <path d="M16 2v4M8 2v4M3 10h18" stroke="#4285F4" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
+    name:    "Notion",
+    color:   "#ffffff",
+    bgColor: "rgba(255,255,255,0.08)",
+    title:   "Sprint 14 Notes",
+    meta:    "Last edited by Siddhant",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="2" width="18" height="20" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5"/>
+        <path d="M7 8h10M7 12h7M7 16h5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+] as const;
 
-type Palette = typeof PALETTE[keyof typeof PALETTE];
-
-// ── Static mini-week data ─────────────────────────────────────────────────────
-
-const DAYS  = ["Mon", "Tue", "Wed", "Thu", "Fri"] as const;
-const DATES = [7, 8, 9, 10, 11];
-const TODAY = 2; // Wed
-
-interface GridEvent {
-  day: number;
-  startRow: number; // 1-based, each row = 30 min starting at 9am
-  span: number;
-  label: string;
-  palette: Palette;
-}
-
-const GRID_EVENTS: GridEvent[] = [
-  { day: 0, startRow: 1, span: 1, label: "Standup",       palette: PALETTE.indigo  },
-  { day: 1, startRow: 1, span: 1, label: "Standup",       palette: PALETTE.indigo  },
-  { day: 2, startRow: 1, span: 1, label: "Standup",       palette: PALETTE.indigo  },
-  { day: 2, startRow: 3, span: 2, label: "Design Review", palette: PALETTE.teal    },
-  { day: 2, startRow: 7, span: 2, label: "1:1 Sarah",     palette: PALETTE.emerald },
-  { day: 3, startRow: 3, span: 3, label: "Sprint Plan",   palette: PALETTE.indigo  },
-  { day: 4, startRow: 5, span: 4, label: "AI Demo Prep",  palette: PALETTE.teal    },
-];
-
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Component ──────────────────────────────────────────────────────────────────
 
 export default function CalendarCard() {
-  const [activeStep, setActiveStep] = useState(0);
-  const [typedChars, setTypedChars] = useState(0);
-  const [isTyping, setIsTyping]     = useState(true);
-  const [showAdded, setShowAdded]   = useState(false);
+  const [activeSource, setActiveSource] = useState(0);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
-  const step = QUICK_ADD_STEPS[activeStep];
-
-  // Typing animation for quick-add input
   useEffect(() => {
-    if (!isTyping) return;
-    let chars = 0;
-    const timer = setInterval(() => {
-      if (chars <= step.label.length) {
-        setTypedChars(chars);
-        chars += 1;
-      } else {
-        clearInterval(timer);
-        setTimeout(() => {
-          setIsTyping(false);
-          setShowAdded(true);
-          setTimeout(() => {
-            setShowAdded(false);
-            setActiveStep(s => (s + 1) % QUICK_ADD_STEPS.length);
-            setTypedChars(0);
-            setIsTyping(true);
-          }, 1600);
-        }, 400);
-      }
-    }, 55);
-    return () => clearInterval(timer);
-  }, [isTyping, step.label]);
+    const t = setInterval(() => {
+      setActiveSource(s => (s + 1) % SOURCES.length);
+    }, 2400);
+    return () => clearInterval(t);
+  }, []);
 
-  const colWidth  = 100 / DAYS.length;
-  const rowHeight = 100 / 8; // 8 rows = 4 hours (9am–1pm)
+  const src = SOURCES[activeSource];
 
   return (
     <motion.div
@@ -84,144 +70,156 @@ export default function CalendarCard() {
     >
       {/* Header */}
       <div className="flex items-start gap-3 mb-7">
-        <div className="mt-0.5 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2"/>
-            <path d="M16 2v4M8 2v4M3 10h18"/>
+        <div className="mt-0.5 w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
           </svg>
         </div>
         <div>
-          <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Smart scheduling</h3>
+          <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Everything connected</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-[#606068]">
-            Add events in plain English. Cube finds the right slot and keeps your week conflict-free.
+            Cube links your email, calendar, and docs — surfacing what matters, exactly when you need it.
           </p>
         </div>
       </div>
 
-      {/* Mini calendar grid */}
-      <div className="rounded-xl border border-white/[0.05] overflow-hidden" style={{ background: "#0e0f10" }}>
-
-        {/* Day headers */}
-        <div className="grid grid-cols-5 border-b border-white/[0.04]" style={{ paddingLeft: "32px" }}>
-          {DAYS.map((day, i) => {
-            const isToday = i === TODAY;
+      {/* Canvas */}
+      <div
+        ref={canvasRef}
+        className="relative w-full overflow-hidden rounded-xl border border-white/[0.05]"
+        style={{ height: "200px", background: "#0e0f10" }}
+      >
+        {/* Source nodes — left column */}
+        <div className="absolute left-5 inset-y-0 flex flex-col justify-center gap-4">
+          {SOURCES.map((s, i) => {
+            const isActive = i === activeSource;
             return (
-              <div key={day} className="flex flex-col items-center py-2 gap-1">
-                <span
-                  className="text-[9.5px] font-semibold uppercase tracking-widest"
-                  style={{ color: isToday ? "#6366f1" : "#3a3a42" }}
-                >
-                  {day}
+              <div
+                key={s.name}
+                className="flex items-center gap-2 rounded-lg border px-2.5 py-2 transition-all duration-500"
+                style={{
+                  width: "108px",
+                  background: isActive ? s.bgColor : "#141517",
+                  borderColor: isActive ? s.color + "55" : "rgba(255,255,255,0.06)",
+                  opacity: isActive ? 1 : 0.35,
+                  transform: isActive ? "scale(1.03)" : "scale(1)",
+                  boxShadow: isActive ? `0 0 12px ${s.color}22` : "none",
+                }}
+              >
+                {s.icon}
+                <span className="text-[11px] font-medium" style={{ color: isActive ? "#e0e0e4" : "#505058" }}>
+                  {s.name}
                 </span>
-                <div
-                  className="w-6 h-6 rounded-full flex items-center justify-center"
-                  style={{ background: isToday ? "#6366f1" : "transparent" }}
-                >
-                  <span className="text-[12px] font-semibold" style={{ color: isToday ? "#fff" : "#606068" }}>
-                    {DATES[i]}
-                  </span>
-                </div>
               </div>
             );
           })}
         </div>
 
-        {/* Grid body */}
-        <div className="relative" style={{ height: "168px" }}>
-
-          {/* Hour labels */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between py-1 pr-1">
-            {["9am", "10am", "11am", "12pm", "1pm"].map(h => (
-              <span key={h} className="text-[8px] text-right" style={{ color: "#2e2e36" }}>{h}</span>
+        {/* SVG connection lines */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          preserveAspectRatio="none"
+          viewBox="0 0 400 200"
+        >
+          <defs>
+            {SOURCES.map((s, i) => (
+              <linearGradient key={s.name} id={`grad-${i}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor={s.color} stopOpacity="0.6" />
+                <stop offset="100%" stopColor={s.color} stopOpacity="0.15" />
+              </linearGradient>
             ))}
-          </div>
+          </defs>
 
-          {/* Day columns */}
-          <div className="absolute inset-0 grid grid-cols-5" style={{ left: "32px" }}>
-            {DAYS.map((_, di) => (
-              <div
-                key={di}
-                className="relative h-full"
-                style={{ borderLeft: di === 0 ? "none" : "1px solid rgba(255,255,255,0.03)" }}
-              >
-                {[0, 1, 2, 3, 4].map(r => (
-                  <div
-                    key={r}
-                    className="absolute left-0 right-0"
-                    style={{ top: `${r * 20}%`, borderTop: "1px solid rgba(255,255,255,0.03)" }}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-
-          {/* Events + now line */}
-          <div className="absolute inset-0" style={{ left: "32px" }}>
-            {GRID_EVENTS.map(ev => {
-              const p      = ev.palette;
-              const left   = ev.day * colWidth;
-              const top    = (ev.startRow - 1) * rowHeight;
-              const height = ev.span * rowHeight;
-              return (
-                <div
-                  key={`${ev.day}-${ev.startRow}`}
-                  className="absolute rounded-md overflow-hidden"
+          {/* Top node (Gmail) → card: y=44 left → y=100 right */}
+          {[
+            { nodeY: 44,  cardY: 100 },
+            { nodeY: 100, cardY: 100 },
+            { nodeY: 156, cardY: 100 },
+          ].map(({ nodeY, cardY }, i) => {
+            const isActive = i === activeSource;
+            const x1 = 113, x2 = 248;
+            const cx1 = x1 + 60, cy1 = nodeY;
+            const cx2 = x2 - 60, cy2 = cardY;
+            const d = `M ${x1} ${nodeY} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${cardY}`;
+            return (
+              <g key={i}>
+                {/* Base dim path */}
+                <path
+                  d={d}
+                  fill="none"
+                  stroke={SOURCES[i].color}
+                  strokeWidth={isActive ? "1.5" : "1"}
+                  strokeOpacity={isActive ? 0.5 : 0.12}
+                  strokeDasharray="4 6"
                   style={{
-                    left:   `calc(${left}% + 2px)`,
-                    width:  `calc(${colWidth}% - 4px)`,
-                    top:    `calc(${top}% + 1px)`,
-                    height: `calc(${height}% - 2px)`,
-                    background: `linear-gradient(to right, ${p.grad})`,
-                    border: `1px solid ${p.ring}`,
-                    borderLeftWidth: "2px",
-                    borderLeftColor: p.border,
+                    transition: "stroke-opacity 500ms, stroke-width 500ms",
                   }}
-                >
-                  {ev.span >= 2 && (
-                    <p className="px-1.5 py-1 text-[8.5px] font-semibold leading-tight truncate" style={{ color: p.text }}>
-                      {ev.label}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+                />
+                {/* Animated flowing particle */}
+                {isActive && (
+                  <path
+                    d={d}
+                    fill="none"
+                    stroke={`url(#grad-${i})`}
+                    strokeWidth="1.5"
+                    strokeOpacity="0.9"
+                    strokeDasharray="40 160"
+                    style={{
+                      animation: "flowLine 1.2s linear infinite",
+                    }}
+                  />
+                )}
+              </g>
+            );
+          })}
+        </svg>
 
-            {/* Now line */}
-            <div
-              className="absolute z-10 flex items-center"
-              style={{ left: `${TODAY * colWidth}%`, width: `${colWidth}%`, top: "47%" }}
-            >
-              <div className="w-1.5 h-1.5 rounded-full -ml-0.5 shrink-0" style={{ background: "#6366f1" }} />
-              <div className="flex-1 h-px" style={{ background: "#6366f1", opacity: 0.6 }} />
+        {/* Cube thread card — right side */}
+        <div className="absolute right-5 top-1/2 -translate-y-1/2">
+          <div
+            className="rounded-xl border bg-[#18191c] overflow-hidden transition-all duration-500"
+            style={{
+              width: "148px",
+              borderColor: src.color + "44",
+              boxShadow: `0 0 20px ${src.color}18, 0 4px 16px rgba(0,0,0,0.4)`,
+            }}
+          >
+            {/* Card header */}
+            <div className="flex items-center gap-1.5 px-3 pt-2.5 pb-2 border-b border-white/[0.05]">
+              <img src="/cube-logo-white.svg" alt="Cube" className="w-2.5 h-2.5 opacity-60" />
+              <span className="text-[10px] font-medium text-[#505058]">Cube</span>
+              <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            </div>
+
+            {/* Card body — cross-fades on source change */}
+            <div className="p-3 relative overflow-hidden" style={{ minHeight: "64px" }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSource}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <p className="text-[11.5px] font-medium text-[#e0e0e4] leading-snug mb-2">
+                    {src.title}
+                  </p>
+                  <p className="text-[10px] text-[#505058] leading-snug">
+                    {src.meta}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Quick-add input */}
-      <div className="mt-4">
-        <div
-          className="flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300"
-          style={{
-            borderColor: isTyping ? "rgba(99,102,241,0.35)" : showAdded ? "rgba(34,197,94,0.35)" : "rgba(255,255,255,0.06)",
-            background: "rgba(255,255,255,0.02)",
-          }}
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#404048" strokeWidth="2" strokeLinecap="round">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-          <span className="flex-1 text-[13px]" style={{ color: typedChars > 0 ? "#c8c8cc" : "#303038" }}>
-            {typedChars > 0 ? step.label.slice(0, typedChars) : "Add event..."}
-            {isTyping && typedChars > 0 && (
-              <span className="ml-0.5 inline-block h-3.5 w-[1.5px] animate-pulse bg-indigo-400 align-text-bottom rounded-full" />
-            )}
-          </span>
-          {showAdded && (
-            <span className="text-[11px] font-medium shrink-0" style={{ color: "#4ade80" }}>
-              ✓ Added · {step.detail}
-            </span>
-          )}
-        </div>
+        <style>{`
+          @keyframes flowLine {
+            from { stroke-dashoffset: 200; }
+            to   { stroke-dashoffset: 0; }
+          }
+        `}</style>
       </div>
     </motion.div>
   );
