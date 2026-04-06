@@ -95,73 +95,117 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center"
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center px-4"
         >
+          {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/70 backdrop-blur-md"
             onClick={onClose}
           />
+
+          {/* Card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
-            className="relative bg-white rounded-lg p-8 shadow-2xl w-[384px] max-w-[calc(100%-2rem)]"
+            initial={{ opacity: 0, scale: 0.96, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="relative w-full max-w-[380px] rounded-2xl overflow-hidden font-geist"
+            style={{
+              background: "#111213",
+              boxShadow: "0 0 0 1px rgba(255,255,255,0.08), 0 24px 60px rgba(0,0,0,0.8), 0 0 80px rgba(99,102,241,0.08)",
+            }}
           >
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 text-text-tertiary hover:text-text-body transition-colors"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
+            {/* Subtle top glow */}
+            <div
+              className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-px"
+              style={{ background: "linear-gradient(to right, transparent, rgba(99,102,241,0.6), transparent)" }}
+            />
 
-            <h2 className="text-xl font-semibold text-text-body mb-2">
-              Sign in to Core
-            </h2>
-            <p className="text-text-tertiary text-sm mb-6">
-              Choose your account to continue
-            </p>
-
-            <div className="space-y-3">
+            <div className="px-8 pt-8 pb-7">
+              {/* Close button */}
               <button
-                onClick={() => handleSignIn("google")}
-                disabled={buttonsDisabled}
-                className="w-full inline-flex items-center justify-center gap-3 px-4 py-3 bg-text-body text-white rounded-xl text-base font-medium hover:bg-black/80 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                onClick={onClose}
+                className="absolute top-4 right-4 p-1.5 rounded-lg cursor-pointer transition-colors"
+                style={{ color: "#505056" }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#a0a0a6"}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#505056"}
               >
-                <GoogleIcon />
-                Continue with Google
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
               </button>
-              <button
-                onClick={() => handleSignIn("microsoft")}
-                disabled={buttonsDisabled}
-                className="w-full inline-flex items-center justify-center gap-3 px-4 py-3 border border-black/20 text-text-body rounded-xl text-base font-medium hover:bg-black/5 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                <MicrosoftIcon />
-                Continue with Microsoft
-              </button>
-            </div>
 
-            {hasTurnstile && (
-              <div className="mt-4 flex justify-center">
-                <Turnstile
-                  sitekey={TURNSTILE_SITE_KEY}
-                  onVerify={(token: string) => setTurnstileToken(token)}
-                  onExpire={() => setTurnstileToken(null)}
-                  theme="light"
-                  size="flexible"
-                />
+              {/* Logo + title */}
+              <div className="flex flex-col items-center text-center mb-7">
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 p-2.5"
+                  style={{ background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.2)" }}
+                >
+                  <img src="/cube-logo-white.svg" alt="Cube" className="w-full h-full object-contain" />
+                </div>
+                <h2 className="text-[19px] font-semibold tracking-tight" style={{ color: "#e8e8ea" }}>
+                  Sign in to Cube
+                </h2>
+                <p className="mt-1.5 text-[13px]" style={{ color: "#606066" }}>
+                  Choose your account to continue
+                </p>
               </div>
-            )}
+
+              {/* Buttons */}
+              <div className="flex flex-col gap-2.5">
+                <button
+                  onClick={() => handleSignIn("google")}
+                  disabled={buttonsDisabled}
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-[14px] font-medium cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    color: "#e8e8ea",
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.10)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"; }}
+                >
+                  <GoogleIcon />
+                  Continue with Google
+                </button>
+
+                <button
+                  onClick={() => handleSignIn("microsoft")}
+                  disabled={buttonsDisabled}
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-[14px] font-medium cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    color: "#e8e8ea",
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.10)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"; }}
+                >
+                  <MicrosoftIcon />
+                  Continue with Microsoft
+                </button>
+              </div>
+
+              {hasTurnstile && (
+                <div className="mt-5 flex justify-center">
+                  <Turnstile
+                    sitekey={TURNSTILE_SITE_KEY}
+                    onVerify={(token: string) => setTurnstileToken(token)}
+                    onExpire={() => setTurnstileToken(null)}
+                    theme="dark"
+                    size="flexible"
+                  />
+                </div>
+              )}
+
+              <p className="mt-6 text-center text-[11.5px]" style={{ color: "#404046" }}>
+                By continuing, you agree to Cube's{" "}
+                <span className="underline underline-offset-2 cursor-pointer" style={{ color: "#606066" }}>Terms</span>
+                {" "}and{" "}
+                <span className="underline underline-offset-2 cursor-pointer" style={{ color: "#606066" }}>Privacy Policy</span>
+              </p>
+            </div>
           </motion.div>
         </motion.div>
       )}
