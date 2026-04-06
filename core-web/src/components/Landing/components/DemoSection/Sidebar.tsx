@@ -233,10 +233,12 @@ export default function Sidebar({ activeView, onViewChange, activeFileId, onFile
 
       {/* User row */}
       <div className="px-3 py-3 flex items-center gap-2.5 cursor-pointer mt-auto" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div className="w-6 h-6 rounded-full bg-violet-600 flex items-center justify-center shrink-0">
-          <span className="text-white font-semibold" style={{ fontSize: "9px" }}>AB</span>
-        </div>
-        <span className="text-[14px] flex-1 truncate font-normal" style={{ color: TEXT_SEC }}>Abhi</span>
+        <img
+          src="https://api.dicebear.com/9.x/notionists/svg?seed=CubeUser&backgroundColor=7c3aed"
+          alt="You"
+          className="w-6 h-6 rounded-full shrink-0 object-cover"
+        />
+        <span className="text-[14px] flex-1 truncate font-normal" style={{ color: TEXT_SEC }}>You</span>
         <button
           className="cursor-pointer transition-colors"
           style={{ color: TEXT_DIM }}

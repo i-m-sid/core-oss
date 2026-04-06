@@ -7,7 +7,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onGetStarted }: HeroSectionProps) {
   return (
-    <section className="relative w-full min-h-[150vh] overflow-x-hidden font-geist bg-[#0e0f10]">
+    <section className="relative w-full overflow-x-hidden font-geist bg-black">
 
       {/* ── Background video ── */}
       <div
@@ -27,7 +27,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
       </div>
 
       {/* ── Content ── */}
-      <div className="relative z-10 flex flex-col items-center justify-start pt-40 pb-0 px-6">
+      <div className="relative z-10 flex flex-col items-center justify-start pt-40 pb-6 px-6">
 
         {/* Heading */}
         <h1 className="relative z-10 mt-2 flex max-w-md flex-col items-center text-center text-6xl leading-[1.01] font-medium tracking-[-2px] text-white md:max-w-4xl md:text-6xl lg:text-[68px] mb-0">
@@ -64,6 +64,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         <div className="w-screen max-w-375">
           <MainDemo />
         </div>
+        
 
       </div>
     </section>

@@ -3,6 +3,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SignInModal from "./components/SignInModal";
 import HeroSection from "./sections/HeroSection";
+import CustomerLogosSection from "./sections/CustomerLogosSection";
+import FeaturesSection from "./sections/FeaturesSection";
 
 export default function LandingPage() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -13,6 +15,8 @@ export default function LandingPage() {
 
       <main className="flex flex-col">
         <HeroSection onGetStarted={() => setShowSignIn(true)} />
+        <CustomerLogosSection />
+        <FeaturesSection />
       </main>
 
       <Footer />

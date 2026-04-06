@@ -126,27 +126,23 @@ type ModalType = "createWorkspace" | "workspaceSettings" | "dashboardSettings" |
 type WorkspaceSettingsTab = "members" | "apps" | "settings";
 
 
-function SelfPresenceAvatar({ avatarUrl, name, fallbackLetter, userId }: {
+function SelfPresenceAvatar({ avatarUrl, name, userId }: {
   avatarUrl?: string | null;
   name: string;
-  fallbackLetter: string;
   userId?: string;
 }) {
   const onlineUserIds = usePresenceStore((s) => s.onlineUserIds);
   const isOnline = userId ? onlineUserIds.has(userId) : false;
 
+  const dicebearUrl = `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(userId ?? name)}&backgroundColor=transparent`;
+
   return (
     <div className="relative">
-      {avatarUrl ? (
-        <img src={avatarUrl} alt={name} className="w-8 h-8 rounded-full object-cover" />
-      ) : (
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center"
-          style={{ background: avatarGradient(name) }}
-        >
-          <span className="text-xs font-medium text-white">{fallbackLetter}</span>
-        </div>
-      )}
+      <img
+        src={avatarUrl ?? dicebearUrl}
+        alt={name}
+        className="w-8 h-8 rounded-full object-cover"
+      />
       {isOnline && (
         <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
       )}
@@ -1168,7 +1164,6 @@ export default function Sidebar() {
               <SelfPresenceAvatar
                 avatarUrl={userProfile?.avatar_url}
                 name={userProfile?.name || user?.email || "User"}
-                fallbackLetter={isAuthenticated && user?.email ? user.email.charAt(0).toUpperCase() : "G"}
                 userId={user?.id}
               />
             </button>
