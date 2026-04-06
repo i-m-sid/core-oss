@@ -9,13 +9,14 @@ const T_DIM  = "#505056";
 const ACTIVE = "rgba(255,255,255,0.08)";
 const HOVER  = "rgba(255,255,255,0.04)";
 
-// Logged-in user — always Abhi
-const ME = "Abhi";
+// Logged-in user — the viewer
+const ME = "You";
 
 const AVATARS: Record<string, string> = {
   Siddhant: "https://api.dicebear.com/9.x/notionists/svg?seed=Siddhant&backgroundColor=0ea5e9",
   Meet:     "https://api.dicebear.com/9.x/notionists/svg?seed=MeetK&backgroundColor=0f766e",
   Abhi:     "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed",
+  You:      "https://api.dicebear.com/9.x/notionists/svg?seed=YouUser&backgroundColor=7c3aed",
 };
 
 interface ChatMsg {
@@ -30,36 +31,36 @@ const CHANNEL_MESSAGES: Record<string, ChatMsg[]> = {
   general: [
     { id: 0, sender: "Siddhant", text: "Pushed the new onboarding flow to staging — looks clean 🎉", time: "9m" },
     { id: 1, sender: "Meet",     text: "Nice! Checked it on mobile too, feels smooth.", time: "8m" },
-    { id: 2, sender: "Abhi",     text: "Great work. Let's keep this momentum for v1.2.", time: "6m" },
+    { id: 2, sender: "You",     text: "Great work. Let's keep this momentum for v1.2.", time: "6m" },
     { id: 3, sender: "Siddhant", text: "Anyone free for a quick review call before we push to prod?", time: "4m" },
     { id: 4, sender: "Meet",     text: "I'm free after 4pm 👍", time: "3m" },
-    { id: 5, sender: "Abhi",     text: "Works for me. Setting up a Huddle at 4.", time: "1m" },
+    { id: 5, sender: "You",     text: "Works for me. Setting up a Huddle at 4.", time: "1m" },
   ],
   design: [
     { id: 0, sender: "Siddhant", text: "Updated the empty states — check Figma for the latest version.", time: "2h" },
-    { id: 1, sender: "Abhi",     text: "Dashboard header spacing looks tight now, good call.", time: "1h" },
+    { id: 1, sender: "You",     text: "Dashboard header spacing looks tight now, good call.", time: "1h" },
     { id: 2, sender: "Siddhant", text: "Onboarding illustrations are next on my list.", time: "45m" },
     { id: 3, sender: "Meet",     text: "Lmk when they're ready, I'll review before handoff.", time: "30m" },
-    { id: 4, sender: "Abhi",     text: "Let's target handoff by end of week.", time: "20m" },
+    { id: 4, sender: "You",     text: "Let's target handoff by end of week.", time: "20m" },
   ],
   engineering: [
-    { id: 0, sender: "Abhi",     text: "Build is stable, QA signed off this morning ✅", time: "5h" },
+    { id: 0, sender: "You",     text: "Build is stable, QA signed off this morning ✅", time: "5h" },
     { id: 1, sender: "Meet",     text: "There's a z-index issue on mobile in the hero — clipped on Safari.", time: "3h" },
-    { id: 2, sender: "Abhi",     text: "I'll take a look before merge. Good catch.", time: "2h" },
+    { id: 2, sender: "You",     text: "I'll take a look before merge. Good catch.", time: "2h" },
     { id: 3, sender: "Meet",     text: "PR is approved btw — both reviewers signed off.", time: "1h" },
     { id: 4, sender: "Siddhant", text: "Merging once the z-index is sorted 🚀", time: "30m" },
-    { id: 5, sender: "Abhi",     text: "Fixed. Go ahead and merge.", time: "10m" },
+    { id: 5, sender: "You",     text: "Fixed. Go ahead and merge.", time: "10m" },
   ],
   launches: [
-    { id: 0, sender: "Abhi",     text: "v1.2 launch plan is locked — see Notion for the checklist.", time: "1d" },
+    { id: 0, sender: "You",     text: "v1.2 launch plan is locked — see Notion for the checklist.", time: "1d" },
     { id: 1, sender: "Siddhant", text: "Design assets will be merged by Sunday EOD.", time: "20h" },
     { id: 2, sender: "Meet",     text: "Engineering is green. Ready when you are.", time: "18h" },
-    { id: 3, sender: "Abhi",     text: "Shipping Wednesday 🎯 Let's go.", time: "16h" },
+    { id: 3, sender: "You",     text: "Shipping Wednesday 🎯 Let's go.", time: "16h" },
   ],
   random: [
     { id: 0, sender: "Meet",     text: "Anyone tried Ideavo? The one-click publish is genuinely insane 🚀", time: "2d" },
     { id: 1, sender: "Siddhant", text: "Yeah I built a full app in like 10 mins yesterday lol", time: "2d" },
-    { id: 2, sender: "Abhi",     text: "We should use it for the internal tools we keep putting off 👀", time: "1d" },
+    { id: 2, sender: "You",     text: "We should use it for the internal tools we keep putting off 👀", time: "1d" },
   ],
 };
 
@@ -67,24 +68,24 @@ const CHANNEL_MESSAGES: Record<string, ChatMsg[]> = {
 const DM_MESSAGES: Record<string, ChatMsg[]> = {
   siddhant: [
     { id: 0, sender: "Siddhant", text: "Hey, sent over the design review notes — lmk if anything's unclear.", time: "45m" },
-    { id: 1, sender: "Abhi",     text: "Looks good! The empty states section is super helpful.", time: "40m" },
+    { id: 1, sender: "You",     text: "Looks good! The empty states section is super helpful.", time: "40m" },
     { id: 2, sender: "Siddhant", text: "Cool. I'll start on the onboarding illustrations today.", time: "38m" },
-    { id: 3, sender: "Abhi",     text: "Let's sync Wednesday before you hand off?", time: "35m" },
+    { id: 3, sender: "You",     text: "Let's sync Wednesday before you hand off?", time: "35m" },
     { id: 4, sender: "Siddhant", text: "Wednesday works. I'll send a cal invite.", time: "30m" },
   ],
   meet: [
     { id: 0, sender: "Meet",     text: "PR #48 is approved and ready to merge whenever you are.", time: "3h" },
-    { id: 1, sender: "Abhi",     text: "Nice! I'll check the z-index comment first then merge.", time: "2h" },
+    { id: 1, sender: "You",     text: "Nice! I'll check the z-index comment first then merge.", time: "2h" },
     { id: 2, sender: "Meet",     text: "Yeah that one's minor — just a Safari clip, easy fix.", time: "2h" },
-    { id: 3, sender: "Abhi",     text: "Fixed. Merging now 🎉", time: "1h" },
+    { id: 3, sender: "You",     text: "Fixed. Merging now 🎉", time: "1h" },
     { id: 4, sender: "Meet",     text: "Let's gooo 🚀", time: "55m" },
   ],
   abhi: [
-    { id: 0, sender: "Abhi",     text: "v1.2 ships Wednesday — make sure everything's merged by Monday EOD.", time: "1d" },
-    { id: 1, sender: "Siddhant", text: "On it. Design assets done by Sunday.", time: "23h" },
-    { id: 2, sender: "Abhi",     text: "Perfect. QA signed off on the build already.", time: "22h" },
-    { id: 3, sender: "Siddhant", text: "Can't wait to ship this one 🙌", time: "20h" },
-    { id: 4, sender: "Abhi",     text: "Same. This is going to be a solid release.", time: "19h" },
+    { id: 0, sender: "Abhi", text: "Hey! Can you review the copy for the pricing page?", time: "3h" },
+    { id: 1, sender: "You",  text: "Sure, sending feedback shortly.", time: "2h" },
+    { id: 2, sender: "Abhi", text: "No rush — whenever you get a chance 🙏", time: "2h" },
+    { id: 3, sender: "You",  text: "Left comments in the doc. Looks great overall!", time: "1h" },
+    { id: 4, sender: "Abhi", text: "Perfect, updating now. Thanks!", time: "45m" },
   ],
 };
 
@@ -99,7 +100,7 @@ const CHANNELS = [
 const DMS = [
   { id: "siddhant", label: "Siddhant Chaudry", sender: "Siddhant", online: true  },
   { id: "meet",     label: "Meet Kotadiya",    sender: "Meet",     online: true  },
-  { id: "abhi",     label: "Siddhant (2)",     sender: "Siddhant", online: false },
+  { id: "abhi",     label: "Abhi Sharma",       sender: "Abhi",    online: true  },
 ];
 
 export default function InboxView() {

@@ -33,7 +33,7 @@ export default function Navbar({ onGetStarted }: NavbarProps) {
     >
       {/* Left — logo + brand + nav links */}
       <motion.div
-        className="flex items-center gap-8 rounded-lg px-4 py-3"
+        className="flex items-center gap-8 rounded-lg px-3 py-2.5 md:px-4 md:py-3"
         animate={shellStyles}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
@@ -44,7 +44,7 @@ export default function Navbar({ onGetStarted }: NavbarProps) {
           </span>
         </div>
 
-        <nav className="flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-6">
           {["Pricing", "Changelog"].map(link => (
             <a
               key={link}
@@ -57,22 +57,22 @@ export default function Navbar({ onGetStarted }: NavbarProps) {
         </nav>
       </motion.div>
 
-      {/* Right — login + CTA */}
+      {/* Right — login (+ CTA on desktop) */}
       <motion.div
-        className="flex items-center rounded-lg px-3 py-3"
+        className="flex items-center rounded-lg px-2 py-2 md:px-3 md:py-3"
         animate={shellStyles}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="flex items-center gap-2">
           <button
             onClick={onGetStarted}
-            className="text-[14px] inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-md border border-white/20 bg-white/5 px-5 py-1.5 font-medium text-white transition-all hover:scale-[1.02] hover:border-white/40 hover:bg-white/10 active:scale-[0.98]"
+            className="text-[14px] inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-md border border-white/20 bg-white/5 px-4 py-1.5 md:px-5 font-medium text-white transition-all hover:scale-[1.02] hover:border-white/40 hover:bg-white/10 active:scale-[0.98]"
           >
             Log in
           </button>
           <button
             onClick={onGetStarted}
-            className="text-[14px] inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-md bg-white px-5 py-1.5 font-medium text-black transition-all hover:scale-[1.02] hover:bg-white/90 active:scale-[0.98]"
+            className="hidden md:inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-md bg-white px-5 py-1.5 text-[14px] font-medium text-black transition-all hover:scale-[1.02] hover:bg-white/90 active:scale-[0.98]"
           >
             {NAV.cta}
           </button>
