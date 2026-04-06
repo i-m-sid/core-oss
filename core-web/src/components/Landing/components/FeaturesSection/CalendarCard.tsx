@@ -2,38 +2,47 @@ import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { QUICK_ADD_STEPS } from "../../constants/featuresData";
 
-// ── Static mini-week data ─────────────────────────────────────────────────
+// ── Palette ───────────────────────────────────────────────────────────────────
 
-const DAYS  = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const PALETTE = {
+  indigo:  { border: "#6366f1", grad: "rgba(99,102,241,0.18),rgba(99,102,241,0.05)", ring: "rgba(99,102,241,0.12)", text: "#a5b4fc" },
+  emerald: { border: "#34d399", grad: "rgba(52,211,153,0.15),rgba(52,211,153,0.04)", ring: "rgba(52,211,153,0.10)", text: "#6ee7b7" },
+  teal:    { border: "#2dd4bf", grad: "rgba(45,212,191,0.15),rgba(45,212,191,0.04)", ring: "rgba(45,212,191,0.10)", text: "#5eead4" },
+} as const;
+
+type Palette = typeof PALETTE[keyof typeof PALETTE];
+
+// ── Static mini-week data ─────────────────────────────────────────────────────
+
+const DAYS  = ["Mon", "Tue", "Wed", "Thu", "Fri"] as const;
 const DATES = [7, 8, 9, 10, 11];
 const TODAY = 2; // Wed
 
 interface GridEvent {
   day: number;
-  startRow: number; // 1-based grid row (each row = 30 min, row 1 = 9am)
+  startRow: number; // 1-based, each row = 30 min starting at 9am
   span: number;
   label: string;
-  color: string;
-  bg: string;
+  palette: Palette;
 }
 
 const GRID_EVENTS: GridEvent[] = [
-  { day: 0, startRow: 1, span: 1, label: "Standup",       color: "#818cf8", bg: "rgba(99,102,241,0.14)"  },
-  { day: 1, startRow: 1, span: 1, label: "Standup",       color: "#818cf8", bg: "rgba(99,102,241,0.14)"  },
-  { day: 2, startRow: 1, span: 1, label: "Standup",       color: "#818cf8", bg: "rgba(99,102,241,0.14)"  },
-  { day: 2, startRow: 3, span: 2, label: "Design Review", color: "#22d3ee", bg: "rgba(34,211,238,0.11)"  },
-  { day: 2, startRow: 7, span: 2, label: "1:1 Sarah",     color: "#a78bfa", bg: "rgba(139,92,246,0.13)"  },
-  { day: 3, startRow: 3, span: 3, label: "Sprint Plan",   color: "#fbbf24", bg: "rgba(245,158,11,0.12)"  },
-  { day: 4, startRow: 5, span: 4, label: "AI Demo Prep",  color: "#4ade80", bg: "rgba(34,197,94,0.11)"   },
+  { day: 0, startRow: 1, span: 1, label: "Standup",       palette: PALETTE.indigo  },
+  { day: 1, startRow: 1, span: 1, label: "Standup",       palette: PALETTE.indigo  },
+  { day: 2, startRow: 1, span: 1, label: "Standup",       palette: PALETTE.indigo  },
+  { day: 2, startRow: 3, span: 2, label: "Design Review", palette: PALETTE.teal    },
+  { day: 2, startRow: 7, span: 2, label: "1:1 Sarah",     palette: PALETTE.emerald },
+  { day: 3, startRow: 3, span: 3, label: "Sprint Plan",   palette: PALETTE.indigo  },
+  { day: 4, startRow: 5, span: 4, label: "AI Demo Prep",  palette: PALETTE.teal    },
 ];
 
-// ── Component ─────────────────────────────────────────────────────────────
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function CalendarCard() {
-  const [activeStep, setActiveStep]     = useState(0);
-  const [typedChars, setTypedChars]     = useState(0);
-  const [isTyping, setIsTyping]         = useState(true);
-  const [showAdded, setShowAdded]       = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [typedChars, setTypedChars] = useState(0);
+  const [isTyping, setIsTyping]     = useState(true);
+  const [showAdded, setShowAdded]   = useState(false);
 
   const step = QUICK_ADD_STEPS[activeStep];
 
@@ -61,6 +70,9 @@ export default function CalendarCard() {
     }, 55);
     return () => clearInterval(timer);
   }, [isTyping, step.label]);
+
+  const colWidth  = 100 / DAYS.length;
+  const rowHeight = 100 / 8; // 8 rows = 4 hours (9am–1pm)
 
   return (
     <motion.div
@@ -116,14 +128,15 @@ export default function CalendarCard() {
 
         {/* Grid body */}
         <div className="relative" style={{ height: "168px" }}>
-          {/* Hour label column */}
+
+          {/* Hour labels */}
           <div className="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between py-1 pr-1">
             {["9am", "10am", "11am", "12pm", "1pm"].map(h => (
               <span key={h} className="text-[8px] text-right" style={{ color: "#2e2e36" }}>{h}</span>
             ))}
           </div>
 
-          {/* Vertical day columns */}
+          {/* Day columns */}
           <div className="absolute inset-0 grid grid-cols-5" style={{ left: "32px" }}>
             {DAYS.map((_, di) => (
               <div
@@ -131,7 +144,6 @@ export default function CalendarCard() {
                 className="relative h-full"
                 style={{ borderLeft: di === 0 ? "none" : "1px solid rgba(255,255,255,0.03)" }}
               >
-                {/* Horizontal hour lines */}
                 {[0, 1, 2, 3, 4].map(r => (
                   <div
                     key={r}
@@ -143,15 +155,13 @@ export default function CalendarCard() {
             ))}
           </div>
 
-          {/* Events */}
+          {/* Events + now line */}
           <div className="absolute inset-0" style={{ left: "32px" }}>
             {GRID_EVENTS.map(ev => {
-              const colWidth = 100 / DAYS.length;
-              const rowHeight = 100 / 8; // 8 rows = 4 hours (9am–1pm)
+              const p      = ev.palette;
               const left   = ev.day * colWidth;
               const top    = (ev.startRow - 1) * rowHeight;
               const height = ev.span * rowHeight;
-
               return (
                 <div
                   key={`${ev.day}-${ev.startRow}`}
@@ -161,12 +171,14 @@ export default function CalendarCard() {
                     width:  `calc(${colWidth}% - 4px)`,
                     top:    `calc(${top}% + 1px)`,
                     height: `calc(${height}% - 2px)`,
-                    background: ev.bg,
-                    borderLeft: `2px solid ${ev.color}`,
+                    background: `linear-gradient(to right, ${p.grad})`,
+                    border: `1px solid ${p.ring}`,
+                    borderLeftWidth: "2px",
+                    borderLeftColor: p.border,
                   }}
                 >
                   {ev.span >= 2 && (
-                    <p className="px-1.5 py-1 text-[8.5px] font-semibold leading-tight truncate" style={{ color: ev.color }}>
+                    <p className="px-1.5 py-1 text-[8.5px] font-semibold leading-tight truncate" style={{ color: p.text }}>
                       {ev.label}
                     </p>
                   )}
@@ -174,10 +186,10 @@ export default function CalendarCard() {
               );
             })}
 
-            {/* Today "now" line */}
+            {/* Now line */}
             <div
               className="absolute z-10 flex items-center"
-              style={{ left: `${TODAY * (100 / DAYS.length)}%`, width: `${100 / DAYS.length}%`, top: "47%" }}
+              style={{ left: `${TODAY * colWidth}%`, width: `${colWidth}%`, top: "47%" }}
             >
               <div className="w-1.5 h-1.5 rounded-full -ml-0.5 shrink-0" style={{ background: "#6366f1" }} />
               <div className="flex-1 h-px" style={{ background: "#6366f1", opacity: 0.6 }} />
@@ -187,7 +199,7 @@ export default function CalendarCard() {
       </div>
 
       {/* Quick-add input */}
-      <div className="mt-4 relative">
+      <div className="mt-4">
         <div
           className="flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300"
           style={{

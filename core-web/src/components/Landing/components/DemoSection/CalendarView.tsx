@@ -1,58 +1,120 @@
+import { useState, useEffect } from "react";
+
 const BG     = "#121314";
 const BORDER = "rgba(255,255,255,0.04)";
-const T_PRI  = "#f0f0f0";
 const T_SEC  = "#a0a0a6";
 const T_DIM  = "#4a4a50";
 
-// ── Shared data (also imported by Sidebar) ────────────────────────────────────
+// ── Palette ───────────────────────────────────────────────────────────────────
 
-export const CAL_DAYS  = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-export const CAL_DATES = [31, 1, 2, 3, 4, 5, 6];
-export const TODAY_COL = 2; // Wed
+// indigo = team/recurring  |  emerald = personal/social  |  teal = technical
+const PALETTE = {
+  indigo:  { border: "#6366f1", grad: "rgba(99,102,241,0.18),rgba(99,102,241,0.05)",  ring: "rgba(99,102,241,0.12)",  text: "#a5b4fc", sub: "rgba(165,180,252,0.5)"  },
+  emerald: { border: "#34d399", grad: "rgba(52,211,153,0.15),rgba(52,211,153,0.04)",  ring: "rgba(52,211,153,0.10)",  text: "#6ee7b7", sub: "rgba(110,231,183,0.5)"  },
+  teal:    { border: "#2dd4bf", grad: "rgba(45,212,191,0.15),rgba(45,212,191,0.04)",  ring: "rgba(45,212,191,0.10)",  text: "#5eead4", sub: "rgba(94,234,212,0.5)"   },
+} as const;
 
+type Palette = typeof PALETTE[keyof typeof PALETTE];
+
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+const DAYS  = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 const HOURS = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
-const CELL_H = 54;
+const CELL_H     = 54;
 const TOP_OFFSET = 8;
 
-export interface CalEvent {
+interface CalEvent {
   id: string;
   title: string;
   subtitle?: string;
-  day: number;
+  day: number;      // 0=Mon … 6=Sun
   startH: number;
   durationH: number;
-  color: string;
-  bg: string;
+  palette: Palette;
 }
 
-export const EVENTS: CalEvent[] = [
-  { id:"e1",  title:"Team Standup",      subtitle:"Engineering · Daily",  day:0, startH:9,    durationH:0.5, color:"#6366f1", bg:"rgba(99,102,241,0.14)" },
-  { id:"e2",  title:"Team Standup",      subtitle:"Engineering · Daily",  day:1, startH:9,    durationH:0.5, color:"#6366f1", bg:"rgba(99,102,241,0.14)" },
-  { id:"e3",  title:"Team Standup",      subtitle:"Engineering · Daily",  day:2, startH:9,    durationH:0.5, color:"#6366f1", bg:"rgba(99,102,241,0.14)" },
-  { id:"e4",  title:"Design Review",     subtitle:"with Siddhant",        day:2, startH:11,   durationH:1,   color:"#22d3ee", bg:"rgba(34,211,238,0.11)" },
-  { id:"e5",  title:"1:1 with Sarah",    subtitle:"Product sync",          day:2, startH:14,   durationH:1,   color:"#8b5cf6", bg:"rgba(139,92,246,0.13)" },
-  { id:"e6",  title:"Sprint Planning",   subtitle:"Sprint 15 kickoff",     day:3, startH:10,   durationH:1.5, color:"#f59e0b", bg:"rgba(245,158,11,0.12)" },
-  { id:"e7",  title:"Investor Update",   subtitle:"Monthly · Abhi",        day:3, startH:15,   durationH:1,   color:"#e11d48", bg:"rgba(225,29,72,0.12)"  },
-  { id:"e8",  title:"AI Demo Prep",      subtitle:"Landing page review",   day:4, startH:13,   durationH:2,   color:"#22c55e", bg:"rgba(34,197,94,0.11)"  },
-  { id:"e9",  title:"Lunch — Meet + Liam",                                 day:1, startH:12.5, durationH:1,   color:"#f59e0b", bg:"rgba(245,158,11,0.10)" },
-  { id:"e10", title:"API Review",        subtitle:"v1.2 endpoints",        day:0, startH:11,   durationH:1.5, color:"#22d3ee", bg:"rgba(34,211,238,0.10)" },
+const EVENTS: CalEvent[] = [
+  { id:"e1",  title:"Team Standup",        subtitle:"Engineering · Daily", day:0, startH:9,    durationH:0.5, palette:PALETTE.indigo  },
+  { id:"e2",  title:"Team Standup",        subtitle:"Engineering · Daily", day:1, startH:9,    durationH:0.5, palette:PALETTE.indigo  },
+  { id:"e3",  title:"Team Standup",        subtitle:"Engineering · Daily", day:2, startH:9,    durationH:0.5, palette:PALETTE.indigo  },
+  { id:"e4",  title:"Design Review",       subtitle:"with Siddhant",       day:2, startH:11,   durationH:1,   palette:PALETTE.teal    },
+  { id:"e5",  title:"1:1 with Sarah",      subtitle:"Product sync",        day:2, startH:14,   durationH:1,   palette:PALETTE.emerald },
+  { id:"e6",  title:"Sprint Planning",     subtitle:"Sprint 15 kickoff",   day:3, startH:10,   durationH:1.5, palette:PALETTE.indigo  },
+  { id:"e7",  title:"Investor Update",     subtitle:"Monthly · Abhi",      day:3, startH:15,   durationH:1,   palette:PALETTE.teal    },
+  { id:"e8",  title:"AI Demo Prep",        subtitle:"Landing page review", day:4, startH:13,   durationH:2,   palette:PALETTE.teal    },
+  { id:"e9",  title:"Lunch — Meet + Liam",                                 day:1, startH:12.5, durationH:1,   palette:PALETTE.emerald },
+  { id:"e10", title:"API Review",          subtitle:"v1.2 endpoints",      day:0, startH:11,   durationH:1.5, palette:PALETTE.teal    },
 ];
+
+// Exported for Sidebar
+export { EVENTS };
+export type { CalEvent };
+
+// ── Week helpers ──────────────────────────────────────────────────────────────
+
+function getWeekData() {
+  const now    = new Date();
+  const dow    = now.getDay(); // 0=Sun … 6=Sat
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((dow + 6) % 7));
+
+  const dates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d.getDate();
+  });
+
+  const todayCol = (dow + 6) % 7; // 0=Mon … 6=Sun
+
+  return { dates, todayCol };
+}
+
+function getNowHour() {
+  const now = new Date();
+  return now.getHours() + now.getMinutes() / 60;
+}
 
 function pxFromHour(h: number) { return (h - TOP_OFFSET) * CELL_H; }
 
-// ── Component — pure week grid, no left panel ─────────────────────────────────
+// Exported for Sidebar highlight
+export const TODAY_COL = getWeekData().todayCol;
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function CalendarView() {
-  const nowPx = pxFromHour(14.25);
+  const [{ dates, todayCol }, setWeek] = useState(getWeekData);
+  const [nowH, setNowH] = useState(getNowHour);
+
+  // Tick at the top of every minute to keep dates + now-line current
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+
+    const timeout = setTimeout(() => {
+      setWeek(getWeekData());
+      setNowH(getNowHour());
+      interval = setInterval(() => {
+        setWeek(getWeekData());
+        setNowH(getNowHour());
+      }, 60_000);
+    }, (60 - new Date().getSeconds()) * 1000);
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const nowPx     = pxFromHour(nowH);
+  const nowVisible = nowH >= HOURS[0] && nowH <= HOURS[HOURS.length - 1];
 
   return (
     <div className="flex flex-1 flex-col min-w-0 h-full overflow-hidden" style={{ background: BG }}>
 
       {/* Week header */}
-      <div className="shrink-0 flex" style={{ borderBottom: `1px solid rgba(255,255,255,0.05)` }}>
+      <div className="shrink-0 flex" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="w-12 shrink-0" />
-        {CAL_DAYS.map((day, i) => {
-          const isToday = i === TODAY_COL;
+        {DAYS.map((day, i) => {
+          const isToday = i === todayCol;
           return (
             <div
               key={day}
@@ -73,7 +135,7 @@ export default function CalendarView() {
                   className="text-[13px] font-semibold"
                   style={{ color: isToday ? "#fff" : T_SEC }}
                 >
-                  {CAL_DATES[i]}
+                  {dates[i]}
                 </span>
               </div>
             </div>
@@ -101,9 +163,9 @@ export default function CalendarView() {
           </div>
 
           {/* Day columns */}
-          {CAL_DAYS.map((day, di) => {
+          {DAYS.map((day, di) => {
             const dayEvents = EVENTS.filter(e => e.day === di);
-            const isToday = di === TODAY_COL;
+            const isToday   = di === todayCol;
             return (
               <div
                 key={day}
@@ -122,8 +184,8 @@ export default function CalendarView() {
                   />
                 ))}
 
-                {/* Today "now" line */}
-                {isToday && (
+                {/* Now line */}
+                {isToday && nowVisible && (
                   <div className="absolute left-0 right-0 z-10 flex items-center" style={{ top: `${nowPx}px` }}>
                     <div className="w-1.5 h-1.5 rounded-full -ml-0.5 shrink-0" style={{ background: "#6366f1" }} />
                     <div className="flex-1 h-px" style={{ background: "#6366f1", opacity: 0.7 }} />
@@ -134,22 +196,25 @@ export default function CalendarView() {
                 {dayEvents.map(ev => {
                   const top    = pxFromHour(ev.startH);
                   const height = Math.max(ev.durationH * CELL_H - 4, 22);
+                  const p      = ev.palette;
                   return (
                     <div
                       key={ev.id}
-                      className="absolute left-1 right-1 rounded-lg px-2.5 py-2 cursor-pointer hover:brightness-110 transition-all overflow-hidden"
+                      className="absolute left-1 right-1 rounded-lg px-2.5 py-1.5 cursor-pointer transition-all overflow-hidden flex flex-col justify-center"
                       style={{
                         top: `${top + 2}px`,
                         height: `${height}px`,
-                        background: ev.bg,
-                        borderLeft: `2px solid ${ev.color}`,
+                        background: `linear-gradient(to right, ${p.grad})`,
+                        border: `1px solid ${p.ring}`,
+                        borderLeftWidth: "2px",
+                        borderLeftColor: p.border,
                       }}
                     >
-                      <p className="text-[11.5px] font-semibold leading-tight truncate" style={{ color: ev.color }}>
+                      <p className="text-[11px] font-semibold leading-none truncate" style={{ color: p.text }}>
                         {ev.title}
                       </p>
                       {ev.subtitle && height > 34 && (
-                        <p className="text-[10px] truncate mt-0.5" style={{ color: `${ev.color}88` }}>
+                        <p className="text-[10px] truncate mt-1 leading-none" style={{ color: p.sub }}>
                           {ev.subtitle}
                         </p>
                       )}
