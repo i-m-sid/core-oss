@@ -456,7 +456,7 @@ function AppContent() {
     // Not authenticated, show landing page
     return (
       <Suspense fallback={
-        <div className="h-screen w-screen flex items-center justify-center bg-white">
+        <div className="min-h-[160vh] w-screen flex items-center justify-center bg-white">
           <div className="w-8 h-8 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin" />
         </div>
       }>
