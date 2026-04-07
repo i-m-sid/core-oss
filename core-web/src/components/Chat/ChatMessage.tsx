@@ -24,12 +24,12 @@ function UserMessage({ content, contentParts }: { content: string; contentParts?
   const isMultiline = content.includes('\n');
 
   return (
-    <div className="py-2">
-      <div className="max-w-[680px] mx-auto px-6">
+    <div className="py-3">
+      <div className="max-w-3xl mx-auto px-4">
         <div className="flex flex-col items-end gap-2">
           {/* Attachment thumbnails */}
           {attachmentParts.length > 0 && (
-            <div className="flex gap-2 flex-wrap justify-end max-w-[80%]">
+            <div className="flex gap-2 flex-wrap justify-end max-w-[70%]">
               {attachmentParts.map((part) => {
                 // Use local preview URL if available, otherwise show from server
                 const previewUrl = part.data.preview_url as string | undefined;
@@ -60,9 +60,9 @@ function UserMessage({ content, contentParts }: { content: string; contentParts?
           {/* Bubble */}
           {content && (
             <div
-              className={`bg-[#5E5CE6] rounded-[18px] px-4 max-w-[80%] ${isMultiline ? 'py-3' : 'py-2'}`}
+              className={`bg-[#F4F4F4] rounded-[18px] px-4 max-w-[70%] ${isMultiline ? 'py-3' : 'py-1.5'}`}
             >
-              <div className="whitespace-pre-wrap text-white text-[14px] leading-relaxed">
+              <div className="whitespace-pre-wrap text-text-body text-[16px] leading-relaxed">
                 {content}
               </div>
             </div>
@@ -86,11 +86,11 @@ function AssistantMessage({ content, contentParts, messageId, isStreaming, onReg
   const hasContentParts = contentParts && contentParts.length > 0;
 
   return (
-    <div className="group py-3">
-      <div className="max-w-[680px] mx-auto px-6">
+    <div className="group py-4">
+      <div className="max-w-3xl mx-auto px-4">
         <div>
           {/* Content */}
-          <div className="text-[14px] leading-relaxed text-text-body">
+          <div className="max-w-[85%]">
             {hasContentParts ? (
               <ContentPartsRenderer parts={contentParts} messageId={messageId} isStreaming={isStreaming} />
             ) : (
@@ -99,38 +99,38 @@ function AssistantMessage({ content, contentParts, messageId, isStreaming, onReg
 
             {/* Message actions */}
             {!isStreaming && content && (
-              <div className="flex items-center gap-0.5 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-1 mt-2">
                 <button
                   onClick={handleCopyMessage}
-                  className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded-lg transition-colors"
+                  className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded transition-colors"
                   title="Copy"
                 >
                   {copied ? (
-                    <CheckIcon className="w-3.5 h-3.5 stroke-2" />
+                    <CheckIcon className="w-4 h-4 stroke-2" />
                   ) : (
-                    <DocumentDuplicateIcon className="w-3.5 h-3.5" />
+                    <DocumentDuplicateIcon className="w-4 h-4" />
                   )}
                 </button>
                 {onRegenerate && messageId && (
                   <button
                     onClick={() => onRegenerate(messageId)}
-                    className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded-lg transition-colors"
+                    className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded transition-colors"
                     title="Regenerate response"
                   >
-                    <ArrowPathIcon className="w-3.5 h-3.5" />
+                    <ArrowPathIcon className="w-4 h-4" />
                   </button>
                 )}
                 <button
-                  className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded-lg transition-colors"
+                  className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded transition-colors"
                   title="Good response"
                 >
-                  <HandThumbUpIcon className="w-3.5 h-3.5" />
+                  <HandThumbUpIcon className="w-4 h-4" />
                 </button>
                 <button
-                  className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded-lg transition-colors"
+                  className="p-1.5 text-text-tertiary hover:text-text-body hover:bg-bg-gray rounded transition-colors"
                   title="Bad response"
                 >
-                  <HandThumbDownIcon className="w-3.5 h-3.5" />
+                  <HandThumbDownIcon className="w-4 h-4" />
                 </button>
               </div>
             )}

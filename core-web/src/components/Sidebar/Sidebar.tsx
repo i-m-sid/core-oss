@@ -126,23 +126,27 @@ type ModalType = "createWorkspace" | "workspaceSettings" | "dashboardSettings" |
 type WorkspaceSettingsTab = "members" | "apps" | "settings";
 
 
-function SelfPresenceAvatar({ avatarUrl, name, userId }: {
+function SelfPresenceAvatar({ avatarUrl, name, fallbackLetter, userId }: {
   avatarUrl?: string | null;
   name: string;
+  fallbackLetter: string;
   userId?: string;
 }) {
   const onlineUserIds = usePresenceStore((s) => s.onlineUserIds);
   const isOnline = userId ? onlineUserIds.has(userId) : false;
 
-  const dicebearUrl = `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(userId ?? name)}&backgroundColor=transparent`;
-
   return (
     <div className="relative">
-      <img
-        src={avatarUrl ?? dicebearUrl}
-        alt={name}
-        className="w-8 h-8 rounded-full object-cover"
-      />
+      {avatarUrl ? (
+        <img src={avatarUrl} alt={name} className="w-8 h-8 rounded-full object-cover" />
+      ) : (
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center"
+          style={{ background: avatarGradient(name) }}
+        >
+          <span className="text-xs font-medium text-white">{fallbackLetter}</span>
+        </div>
+      )}
       {isOnline && (
         <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
       )}
@@ -831,7 +835,7 @@ export default function Sidebar() {
                   <Icon icon={ExternalLink} size={20} className="text-text-body" />
                 ) : selectedView === "dashboard" ? (
                   <img
-                    src="/cube-logo-white.svg"
+                    src="/CoreLogo.png"
                     alt="Personal"
                     className="w-5 h-5"
                   />
@@ -912,7 +916,7 @@ export default function Sidebar() {
                     : "hover:bg-bg-gray"
                 }`}
               >
-                <img src="/cube-logo-white.svg" alt="Personal" className="w-5 h-5" />
+                <img src="/CoreLogo.png" alt="Personal" className="w-5 h-5" />
                 <span className="font-semibold">Personal</span>
               </button>
               <div className="mx-1 my-0.5 border-t border-border-light" />
@@ -1042,7 +1046,7 @@ export default function Sidebar() {
 
         {/* Navigation Icons - Workspace apps */}
         {activeProductType === 'workspace' && (
-        <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 -mx-1 -mt-1 scrollbar-sidebar">
+        <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 -mx-1 -mt-1">
           {/* Workspace-specific mini apps - at top */}
           {displayMiniApps.filter((app) => app.type !== 'email' && app.type !== 'calendar').map((app) => {
             // Check both the direct path and any workspace-prefixed variant
@@ -1087,7 +1091,7 @@ export default function Sidebar() {
 
         {/* AI Builder sidebar content */}
         {activeProductType === 'ai_builder' && (
-          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 scrollbar-sidebar">
+          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1">
             <button
               onClick={() => navigate('/builder')}
               title="AI Apps"
@@ -1100,7 +1104,7 @@ export default function Sidebar() {
 
         {/* Website Builder sidebar content */}
         {activeProductType === 'website_builder' && (
-          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 scrollbar-sidebar">
+          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1">
             <button
               onClick={() => navigate('/sites')}
               title="My Sites"
@@ -1164,6 +1168,7 @@ export default function Sidebar() {
               <SelfPresenceAvatar
                 avatarUrl={userProfile?.avatar_url}
                 name={userProfile?.name || user?.email || "User"}
+                fallbackLetter={isAuthenticated && user?.email ? user.email.charAt(0).toUpperCase() : "G"}
                 userId={user?.id}
               />
             </button>

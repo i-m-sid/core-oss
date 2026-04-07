@@ -610,8 +610,6 @@ export default function ChatView() {
                 </div>
               );
             })}
-            {/* Bottom padding so last message clears the fixed input */}
-            <div className="h-8" />
 
             {/* Streaming AI - absolutely positioned so it doesn't affect container height initially */}
             {hasStreamingContent && (
@@ -622,10 +620,10 @@ export default function ChatView() {
               >
                 {isWaitingForResponse ? (
                   // Waiting indicator with optional status text
-                  <div className="group py-3">
-                    <div className="max-w-[680px] mx-auto px-6">
-                      <div className="flex items-center gap-2">
-                        <span className="inline-block w-2.5 h-2.5 bg-text-tertiary rounded-full animate-thinking-dot" />
+                  <div className="group py-4">
+                    <div className="max-w-3xl mx-auto px-4">
+                      <div className="max-w-[85%] flex items-center gap-2">
+                        <span className="inline-block w-3 h-3 bg-text-body rounded-full animate-thinking-dot" />
                         {streamStatus && (
                           <span className="text-sm text-text-tertiary animate-pulse">{streamStatus}</span>
                         )}
@@ -636,8 +634,10 @@ export default function ChatView() {
                   <>
                     {/* Status indicator above streaming content */}
                     {streamStatus && (
-                      <div className="max-w-[680px] mx-auto px-6 pb-1">
-                        <span className="text-xs text-text-tertiary">{streamStatus}</span>
+                      <div className="max-w-3xl mx-auto px-4 pb-1">
+                        <div className="max-w-[85%]">
+                          <span className="text-xs text-text-tertiary">{streamStatus}</span>
+                        </div>
                       </div>
                     )}
                     {/* Stream content with content parts rendering */}
@@ -670,26 +670,23 @@ export default function ChatView() {
 
       {/* Single input - always rendered, position changes based on state */}
       {!loadingMessages && (
-        <div className={`absolute left-0 right-0 flex flex-col items-center ${isEmpty ? 'top-1/2 -translate-y-1/2 px-6' : 'bottom-0 pb-5 pt-10 bg-[linear-gradient(transparent_0%,var(--color-bg-white)_40%)]'}`}>
+        <div className={`absolute left-0 right-0 px-4 flex flex-col items-center ${isEmpty ? 'top-1/2 -translate-y-1/2' : 'bottom-0 pb-4 pt-8 bg-[linear-gradient(transparent_50%,var(--color-bg-white)_50%)]'}`}>
           {isEmpty && (
-            <div className="mb-8 text-center">
-              <h1 className="text-[22px] font-semibold text-text-body leading-snug">
-                What's on the agenda?
-              </h1>
-              <p className="mt-1.5 text-sm text-text-tertiary">Ask anything — emails, calendar, projects, or just think out loud.</p>
-            </div>
+            <h1 className="text-2xl font-semibold text-text-body mb-8 text-center leading-9">
+              What's on the agenda?
+            </h1>
           )}
           {/* Scroll to bottom button */}
           {showScrollButton && !isEmpty && (
             <button
               onClick={scrollToBottom}
-              className="mb-3 w-7 h-7 rounded-full bg-bg-white border border-border-gray shadow-sm flex items-center justify-center text-text-tertiary hover:text-text-body hover:bg-bg-gray-light transition-colors"
+              className="mb-3 w-8 h-8 rounded-full bg-bg-white border border-border-gray shadow-sm flex items-center justify-center text-text-tertiary hover:text-text-body hover:bg-bg-gray-light transition-colors"
               aria-label="Scroll to bottom"
             >
-              <ArrowDownIcon className="w-3.5 h-3.5 stroke-2" />
+              <ArrowDownIcon className="w-4 h-4 stroke-2" />
             </button>
           )}
-          <div className="w-full max-w-[680px]">
+          <div style={{ width: '90%', maxWidth: '750px' }}>
             <ChatInput
               value={input}
               onChange={setInput}
@@ -713,22 +710,23 @@ export default function ChatView() {
             />
             {/* Suggestion prompts */}
             {isEmpty && (
-              <div className="mt-4 flex flex-wrap gap-2 justify-center">
+              <ul className="mt-4 divide-y divide-border-light px-4">
                 {[
                   'What should I work on today?',
                   'Check my recent emails',
                   'Summarize my upcoming calendar events',
                   'What should I focus on this week?',
                 ].map((prompt) => (
-                  <button
-                    key={prompt}
-                    onClick={() => { setInput(prompt); }}
-                    className="px-3.5 py-2 rounded-full text-[13px] text-text-secondary hover:text-text-body border border-border-gray hover:border-border-secondary bg-bg-white hover:bg-bg-gray-light transition-colors cursor-pointer"
-                  >
-                    {prompt}
-                  </button>
+                  <li key={prompt}>
+                    <button
+                      onClick={() => { setInput(prompt); }}
+                      className="flex w-full items-center gap-2 py-3.5 text-left text-sm text-text-tertiary hover:text-text-body transition-colors cursor-pointer"
+                    >
+                      <span>{prompt}</span>
+                    </button>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </div>
         </div>
