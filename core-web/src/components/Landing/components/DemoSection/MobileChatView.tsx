@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 
 const USER_AVATAR = "https://api.dicebear.com/9.x/notionists/svg?seed=AlexP&backgroundColor=7c3aed";
 
@@ -86,13 +85,6 @@ function ToolRow({ tool }: { tool: ToolCall }) {
 }
 
 export default function MobileChatView() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, []);
 
   return (
     <div className="flex flex-col h-full min-w-0" style={{ background: "#121314" }}>
@@ -110,7 +102,6 @@ export default function MobileChatView() {
 
       {/* Messages */}
       <div
-        ref={scrollRef}
         className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2.5"
         style={{ scrollbarWidth: "none" }}
       >

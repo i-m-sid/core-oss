@@ -126,7 +126,7 @@ export default function FaqSection() {
   const toggle = (i: number) => setOpenIndex((prev) => (prev === i ? null : i));
 
   return (
-    <section className="relative z-10 w-full bg-black font-geist">
+    <section id="pricing" className="relative z-10 w-full bg-black font-geist">
       {/* Top separator */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 

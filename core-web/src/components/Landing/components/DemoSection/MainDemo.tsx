@@ -13,7 +13,7 @@ export default function MainDemo() {
   const [activeFileId, setActiveFileId] = useState<string>("f1");
 
   return (
-    <div className="w-full h-180 mt-5 rounded-lg overflow-hidden font-geist bg-[#111213] shadow-xl shadow-black flex border border-white/6">
+    <div className="w-full h-180 mt-5 rounded-lg overflow-hidden font-geist shadow-xl shadow-black flex border border-white/6 backdrop-blur-sm bg-[#111213]/75">
         <Sidebar
           activeView={activeView}
           onViewChange={setActiveView}

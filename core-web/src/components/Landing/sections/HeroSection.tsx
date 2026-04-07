@@ -50,28 +50,21 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
   return (
     <section className="relative w-full overflow-x-hidden font-geist ">
 
-      {/* Background video */}
-      <div
-        className="pointer-events-none absolute top-0 left-1/2 z-0 h-full w-screen -translate-x-1/2 overflow-hidden"
-        style={{ opacity: 1 }}
-      >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="h-full w-full object-cover object-center opacity-40"
-        >
-          <source src="/landingPage/hero-720.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black" />
+      {/* Background image */}
+      <div className="pointer-events-none absolute top-0 left-1/2 z-0 h-full w-screen -translate-x-1/2 overflow-hidden">
+        <img
+          src="/landingPage/hero-dark.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-top"
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 from-40% via-black/10 via-70% to-black" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-start pt-28 md:pt-40 pb-6 px-4 md:px-6">
 
         {/* Heading */}
-        <h1 className="relative z-10 mt-2 flex flex-col items-center text-center text-[42px] leading-[1.01] font-medium tracking-[-2px] text-white md:text-6xl lg:text-[68px] mb-0">
+        <h1 className="relative z-10 mt-2 flex flex-col items-center text-center text-[32px] leading-[1.05] font-medium tracking-[-1.5px] text-white md:text-6xl lg:text-[68px] mb-0">
           Everything in{" "}
           <span className="text-neutral-400">one place.</span>
         </h1>

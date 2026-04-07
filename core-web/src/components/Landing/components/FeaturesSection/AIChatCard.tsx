@@ -43,8 +43,8 @@ const SHADOW_ACTIVE: Record<string, string> = {
 
 // ── Icons per action key ──────────────────────────────────────────────────
 
-function ActionIcon({ actionKey, color }: { actionKey: AIChatActionKey; color: string }) {
-  const stroke = ICON_COLOR[color];
+function ActionIcon({ actionKey, color: _color }: { actionKey: AIChatActionKey; color: string }) {
+  const stroke = "rgba(255,255,255,0.75)";
   switch (actionKey) {
     case "Summarise":
       return (
@@ -277,7 +277,7 @@ export default function AIChatCard() {
     >
       {/* Header */}
       <div className="flex items-start gap-3 mb-8">
-        <div className="mt-0.5 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0">
+        <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
           <img src="/cube-logo-white.svg" alt="Cube AI" className="w-4 h-4 object-contain opacity-80" />
         </div>
         <div>
@@ -312,7 +312,7 @@ export default function AIChatCard() {
                 }}
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0" style={{ background: ICON_BG[action.color] }}>
+                  <div className="w-5 h-5 rounded-md flex items-center justify-center shrink-0">
                     <ActionIcon actionKey={action.key} color={action.color} />
                   </div>
                   <span className="text-[11px] font-medium text-[#c8c8cc]">{action.key}</span>

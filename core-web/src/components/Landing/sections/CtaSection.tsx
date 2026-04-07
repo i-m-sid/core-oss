@@ -6,7 +6,7 @@ interface CtaSectionProps {
 
 export default function CtaSection({ onGetStarted }: CtaSectionProps) {
   return (
-    <section className="relative z-10 w-full flex flex-col items-center py-24 md:py-32 px-4">
+    <section className="relative z-10 bg-black/90 w-full flex flex-col items-center py-24 md:py-32 px-4">
       <motion.div
         className="max-w-3xl w-full mx-auto text-center"
         initial={{ opacity: 0, y: 24 }}
@@ -15,13 +15,13 @@ export default function CtaSection({ onGetStarted }: CtaSectionProps) {
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <motion.h2
-          className="font-geist text-5xl md:text-6xl font-medium tracking-tight text-white mb-5"
+          className="font-geist text-3xl md:text-6xl font-medium tracking-tight text-white mb-6"
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.04, duration: 0.45 }}
         >
-          One workspace.<br />Everything in sync.
+          Start using Cube today.
         </motion.h2>
 
         <motion.p
@@ -32,7 +32,7 @@ export default function CtaSection({ onGetStarted }: CtaSectionProps) {
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.45 }}
         >
-          Email, chat, calendar, and AI — all connected. Join teams already moving faster with Cube.
+          Free, forever. No credit card required.
         </motion.p>
 
         <motion.div

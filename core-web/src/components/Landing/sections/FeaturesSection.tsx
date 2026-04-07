@@ -1,10 +1,14 @@
 import { motion } from "motion/react";
-import { AIChatCard, TeamInboxCard, CalendarCard, IntegrationsCard } from "../components/FeaturesSection";
+import { AIChatCard, TeamInboxCard, CalendarCard, IntegrationsCard, PricingCard } from "../components/FeaturesSection";
 import { FEATURES_HEADING, FEATURES_SUBHEADING } from "../constants/featuresData";
 
-export default function FeaturesSection() {
+interface FeaturesSectionProps {
+  onGetStarted: () => void;
+}
+
+export default function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
   return (
-    <section className="relative w-full bg-black font-geist">
+    <section id="features" className="relative w-full bg-black font-geist">
       {/* Subtle top separator */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
@@ -39,11 +43,18 @@ export default function FeaturesSection() {
         </motion.div>
 
         {/* Card grid */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <AIChatCard />
-          <TeamInboxCard />
-          <CalendarCard />
-          <IntegrationsCard />
+        <div className="flex flex-col gap-5">
+          {/* Row 1: AIChatCard (full) + TeamInboxCard (half) + CalendarCard (half) */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <AIChatCard />
+            <TeamInboxCard />
+            <CalendarCard />
+          </div>
+          {/* Row 2: IntegrationsCard (3/4) + PricingCard (1/4) */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-4">
+            <IntegrationsCard />
+            <PricingCard onGetStarted={onGetStarted} />
+          </div>
         </div>
 
       </div>

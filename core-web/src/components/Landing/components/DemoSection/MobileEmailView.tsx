@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Paperclip } from "lucide-react";
 
 const T_PRI  = "#e8e8ea";
@@ -137,7 +137,7 @@ function EmailList({ onSelect }: { onSelect: (id: number) => void }) {
             onMouseEnter={ev => (ev.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)"}
             onMouseLeave={ev => (ev.currentTarget as HTMLElement).style.background = "transparent"}
           >
-            <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-[#2a2a2e] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-neutral-100 flex items-center justify-center">
               <img
                 src={e.avatar}
                 alt={e.sender}
@@ -178,13 +178,6 @@ function EmailDetail({ emailId, onBack }: { emailId: number; onBack: () => void 
   const [tone, setTone] = useState<ReplyTone>("Formal");
   const [replyOpen, setReplyOpen] = useState(false);
   const [sentReplies, setSentReplies] = useState<string[]>([]);
-  const bodyEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (sentReplies.length > 0) {
-      bodyEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [sentReplies.length]);
 
   const handleSend = () => {
     setSentReplies(prev => [...prev, AI_DRAFTS[email.id][tone]]);
@@ -235,7 +228,7 @@ function EmailDetail({ emailId, onBack }: { emailId: number; onBack: () => void 
       <div className="flex-1 overflow-y-auto px-4 py-4">
         {/* Sender row */}
         <div className="flex items-center gap-2.5 mb-4">
-          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-[#2a2a2e] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-neutral-100 flex items-center justify-center">
             <img
               src={email.avatar}
               alt={email.sender}
@@ -286,7 +279,6 @@ function EmailDetail({ emailId, onBack }: { emailId: number; onBack: () => void 
             ))}
           </div>
         )}
-        <div ref={bodyEndRef} />
       </div>
 
       {/* Reply bar */}

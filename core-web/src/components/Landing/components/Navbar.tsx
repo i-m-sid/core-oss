@@ -54,13 +54,17 @@ export default function Navbar({ onGetStarted, showLogo = true }: NavbarProps) {
         </div>
 
         <nav className="hidden md:flex items-center gap-6">
-          {["Pricing", "Changelog"].map(link => (
+          {[{ label: "Features", id: "features" }, { label: "Pricing", id: "pricing" }].map(({ label, id }) => (
             <a
-              key={link}
-              href="#"
+              key={id}
+              href={`#${id}`}
+              onClick={e => {
+                e.preventDefault();
+                document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
               className="text-[14px] font-normal text-neutral-300 transition-colors hover:text-white"
             >
-              {link}
+              {label}
             </a>
           ))}
         </nav>

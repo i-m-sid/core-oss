@@ -34,7 +34,7 @@ export default function LandingPage() {
       <main className="flex flex-col">
         <HeroSection onGetStarted={() => setShowSignIn(true)} />
         <CustomerLogosSection />
-        <FeaturesSection />
+        <FeaturesSection onGetStarted={() => setShowSignIn(true)} />
         <FaqSection />
         <CtaSection onGetStarted={() => setShowSignIn(true)} />
       </main>

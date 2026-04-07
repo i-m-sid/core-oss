@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "motion/react";
 
 const MEMBERS = [
@@ -17,9 +16,6 @@ const BOX = 240;
 const C   = BOX / 2; // center = 120
 
 export default function TeamInboxCard() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-
   return (
     <motion.div
       className="col-span-1 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#111213] p-7 flex flex-col"
@@ -30,8 +26,8 @@ export default function TeamInboxCard() {
     >
       {/* Header */}
       <div className="flex items-start gap-3 mb-6">
-        <div className="mt-0.5 w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
@@ -47,14 +43,8 @@ export default function TeamInboxCard() {
 
       {/* Canvas */}
       <div
-        className="flex-1 relative rounded-xl cursor-none flex items-center justify-center"
+        className="flex-1 relative rounded-xl flex items-center justify-center"
         style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.07) 0%, transparent 65%)", minHeight: "260px" }}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-        onMouseMove={(e) => {
-          const r = e.currentTarget.getBoundingClientRect();
-          setMousePos({ x: e.clientX - r.left, y: e.clientY - r.top });
-        }}
       >
         {/* Cluster — fixed size box, everything positioned inside */}
         <div className="relative shrink-0" style={{ width: BOX, height: BOX }}>
@@ -125,23 +115,6 @@ export default function TeamInboxCard() {
             <img src="/cube-logo-white.svg" alt="Cube" style={{ width: 20, height: 20, opacity: 0.65 }} />
           </motion.div>
 
-        </div>
-
-        {/* You cursor */}
-        <div
-          className="pointer-events-none absolute z-50"
-          style={{
-            opacity: isHovering ? 1 : 0,
-            transform: `translate(${mousePos.x}px, ${mousePos.y}px)`,
-            transition: "opacity 150ms",
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="rgba(0,0,0,0.25)" strokeWidth="0.5">
-            <path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/>
-          </svg>
-          <div className="-mt-1 ml-3.5 rounded-md bg-white px-1.5 py-0.5 text-[10px] font-semibold text-black shadow whitespace-nowrap">
-            You
-          </div>
         </div>
 
       </div>

@@ -147,15 +147,11 @@ export default function MobileDemo({ renderView }: MobileDemoProps) {
 
   return (
     <div
-      className="relative w-full overflow-hidden font-geist flex flex-col rounded-2xl"
-      style={{
-        height: "600px",
-      }}
+      className="relative w-full overflow-hidden font-geist flex flex-col rounded-2xl backdrop-blur-sm bg-[#111213]/75 h-[600px]"
     >
       {/* Status bar */}
       <div
-        className="shrink-0 flex items-center justify-between px-5 py-2"
-        style={{ borderBottom: `1px solid ${BORDER}` }}
+        className="shrink-0 flex items-center justify-between px-5 py-2 backdrop-blur-md bg-[#111213]/60 border-b border-white/[0.06]"
       >
         <span className="text-demo-sm font-semibold" style={{ color: T_PRI }}>
           {time}

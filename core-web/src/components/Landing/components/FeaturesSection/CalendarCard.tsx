@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 const SHORTCUTS = [
   {
     action: "Go to Chat",
-    keys: ["G", "C"],
+    keys: ["⌘", "⇧", "C"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -13,7 +13,7 @@ const SHORTCUTS = [
   },
   {
     action: "Go to Inbox",
-    keys: ["G", "I"],
+    keys: ["⌘", "⇧", "I"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -23,7 +23,7 @@ const SHORTCUTS = [
   },
   {
     action: "Go to Projects",
-    keys: ["G", "P"],
+    keys: ["⌘", "⇧", "P"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -42,7 +42,7 @@ const SHORTCUTS = [
   },
   {
     action: "Go to Calendar",
-    keys: ["G", "L"],
+    keys: ["⌘", "⇧", "L"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
@@ -51,16 +51,8 @@ const SHORTCUTS = [
   },
 ];
 
-function KbdKey({ label }: { label: string }) {
-  return (
-    <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-md text-[10px] font-medium bg-white/[0.06] border border-white/[0.10] text-[#909098]">
-      {label}
-    </span>
-  );
-}
-
 export default function CalendarCard() {
-  const [activeIndex, setActiveIndex] = useState(3); // start on "Search"
+  const [activeIndex, setActiveIndex] = useState(3);
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -79,8 +71,8 @@ export default function CalendarCard() {
     >
       {/* Header */}
       <div className="flex items-start gap-3 mb-7">
-        <div className="mt-0.5 w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center shrink-0">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
           </svg>
         </div>
@@ -92,29 +84,26 @@ export default function CalendarCard() {
         </div>
       </div>
 
-      {/* Shortcuts list */}
-      <div className="rounded-xl border border-white/[0.05] bg-[#0e0f10] overflow-hidden">
+      {/* Shortcuts */}
+      <div className="space-y-0.5">
         {SHORTCUTS.map((s, i) => {
           const isActive = i === activeIndex;
           return (
             <div
               key={s.action}
-              className="relative flex items-center gap-3 px-4 py-3 transition-colors duration-300"
-              style={{
-                background: isActive ? "rgba(56,189,248,0.06)" : "transparent",
-                borderBottom: i < SHORTCUTS.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
-              }}
+              className="relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-300"
+              style={{ background: isActive ? "rgba(255,255,255,0.04)" : "transparent" }}
             >
-              {/* Active indicator bar */}
+              {/* Active indicator */}
               <AnimatePresence>
                 {isActive && (
                   <motion.div
                     layoutId="active-bar"
-                    className="absolute left-0 top-0 bottom-0 w-[2px] bg-sky-400 rounded-r-full"
+                    className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r-full bg-white/40"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.18 }}
                   />
                 )}
               </AnimatePresence>
@@ -122,25 +111,28 @@ export default function CalendarCard() {
               {/* Icon */}
               <span
                 className="shrink-0 transition-colors duration-300"
-                style={{ color: isActive ? "#38bdf8" : "#404048" }}
+                style={{ color: isActive ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.18)" }}
               >
                 {s.icon}
               </span>
 
-              {/* Action label */}
-              <span
+              {/* Label */}
+              <motion.span
                 className="flex-1 text-[13px] font-medium transition-colors duration-300"
-                style={{ color: isActive ? "#e8e8ec" : "#505058" }}
+                style={{ color: isActive ? "#e8e8ec" : "#383840" }}
+                animate={{ x: isActive ? 2 : 0 }}
+                transition={{ duration: 0.2 }}
               >
                 {s.action}
-              </span>
+              </motion.span>
 
-              {/* Key badges */}
-              <div className="flex items-center gap-1">
-                {s.keys.map((k) => (
-                  <KbdKey key={k} label={k} />
-                ))}
-              </div>
+              {/* Keys — single pill, monospace, dim */}
+              <span
+                className="font-mono text-[11px] tracking-tight transition-all duration-300 shrink-0"
+                style={{ color: isActive ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.1)" }}
+              >
+                {s.keys.join(" ")}
+              </span>
             </div>
           );
         })}
