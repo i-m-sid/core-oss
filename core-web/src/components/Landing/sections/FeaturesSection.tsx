@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { AIChatCard, TeamInboxCard, CalendarCard } from "../components/FeaturesSection";
+import { AIChatCard, TeamInboxCard, CalendarCard, IntegrationsCard } from "../components/FeaturesSection";
 import { FEATURES_HEADING, FEATURES_SUBHEADING } from "../constants/featuresData";
 
 export default function FeaturesSection() {
@@ -38,11 +38,12 @@ export default function FeaturesSection() {
           </motion.p>
         </motion.div>
 
-        {/* Card grid — AI chat spans 2 cols, inbox + calendar side by side */}
+        {/* Card grid */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <AIChatCard />
           <TeamInboxCard />
           <CalendarCard />
+          <IntegrationsCard />
         </div>
 
       </div>
