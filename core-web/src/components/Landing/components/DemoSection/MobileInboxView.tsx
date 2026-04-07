@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 const BG     = "#111213";
 const BG2    = "#121314";
@@ -12,10 +12,10 @@ const HOVER  = "rgba(255,255,255,0.04)";
 const ME = "You";
 
 const AVATARS: Record<string, string> = {
-  Siddhant: "https://api.dicebear.com/9.x/notionists/svg?seed=Siddhant&backgroundColor=0ea5e9",
-  Meet:     "https://api.dicebear.com/9.x/notionists/svg?seed=MeetK&backgroundColor=0f766e",
-  Abhi:     "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed",
-  You:      "https://api.dicebear.com/9.x/notionists/svg?seed=YouUser&backgroundColor=7c3aed",
+  Jordan: "https://api.dicebear.com/9.x/notionists/svg?seed=Siddhant&backgroundColor=0ea5e9",
+  Casey:  "https://api.dicebear.com/9.x/notionists/svg?seed=MeetK&backgroundColor=0f766e",
+  Alex:   "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed",
+  You:    "https://api.dicebear.com/9.x/notionists/svg?seed=YouUser&backgroundColor=7c3aed",
 };
 
 interface ChatMsg {
@@ -27,27 +27,27 @@ interface ChatMsg {
 
 const CHANNEL_MESSAGES: Record<string, ChatMsg[]> = {
   general: [
-    { id: 0, sender: "Siddhant", text: "Pushed the new onboarding flow to staging — looks clean 🎉", time: "9m" },
-    { id: 1, sender: "Meet",     text: "Nice! Checked it on mobile too, feels smooth.", time: "8m" },
-    { id: 2, sender: "You",      text: "Great work. Let's keep this momentum for v1.2.", time: "6m" },
-    { id: 3, sender: "Siddhant", text: "Anyone free for a quick review call before we push to prod?", time: "4m" },
-    { id: 4, sender: "Meet",     text: "I'm free after 4pm 👍", time: "3m" },
-    { id: 5, sender: "You",      text: "Works for me. Setting up a Huddle at 4.", time: "1m" },
+    { id: 0, sender: "Jordan", text: "Pushed the new onboarding flow to staging — looks clean 🎉", time: "9m" },
+    { id: 1, sender: "Casey",  text: "Nice! Checked it on mobile too, feels smooth.", time: "8m" },
+    { id: 2, sender: "You",    text: "Great work. Let's keep this momentum for v1.2.", time: "6m" },
+    { id: 3, sender: "Jordan", text: "Anyone free for a quick review call before we push to prod?", time: "4m" },
+    { id: 4, sender: "Casey",  text: "I'm free after 4pm 👍", time: "3m" },
+    { id: 5, sender: "You",    text: "Works for me. Setting up a Huddle at 4.", time: "1m" },
   ],
   design: [
-    { id: 0, sender: "Siddhant", text: "Updated the empty states — check Figma for the latest version.", time: "2h" },
-    { id: 1, sender: "You",      text: "Dashboard header spacing looks tight now, good call.", time: "1h" },
-    { id: 2, sender: "Siddhant", text: "Onboarding illustrations are next on my list.", time: "45m" },
-    { id: 3, sender: "Meet",     text: "Lmk when they're ready, I'll review before handoff.", time: "30m" },
-    { id: 4, sender: "You",      text: "Let's target handoff by end of week.", time: "20m" },
+    { id: 0, sender: "Jordan", text: "Updated the empty states — check Figma for the latest version.", time: "2h" },
+    { id: 1, sender: "You",    text: "Dashboard header spacing looks tight now, good call.", time: "1h" },
+    { id: 2, sender: "Jordan", text: "Onboarding illustrations are next on my list.", time: "45m" },
+    { id: 3, sender: "Casey",  text: "Lmk when they're ready, I'll review before handoff.", time: "30m" },
+    { id: 4, sender: "You",    text: "Let's target handoff by end of week.", time: "20m" },
   ],
   engineering: [
-    { id: 0, sender: "You",      text: "Build is stable, QA signed off this morning ✅", time: "5h" },
-    { id: 1, sender: "Meet",     text: "There's a z-index issue on mobile in the hero — clipped on Safari.", time: "3h" },
-    { id: 2, sender: "You",      text: "I'll take a look before merge. Good catch.", time: "2h" },
-    { id: 3, sender: "Meet",     text: "PR is approved btw — both reviewers signed off.", time: "1h" },
-    { id: 4, sender: "Siddhant", text: "Merging once the z-index is sorted 🚀", time: "30m" },
-    { id: 5, sender: "You",      text: "Fixed. Go ahead and merge.", time: "10m" },
+    { id: 0, sender: "You",    text: "Build is stable, QA signed off this morning ✅", time: "5h" },
+    { id: 1, sender: "Casey",  text: "There's a z-index issue on mobile in the hero — clipped on Safari.", time: "3h" },
+    { id: 2, sender: "You",    text: "I'll take a look before merge. Good catch.", time: "2h" },
+    { id: 3, sender: "Casey",  text: "PR is approved btw — both reviewers signed off.", time: "1h" },
+    { id: 4, sender: "Jordan", text: "Merging once the z-index is sorted 🚀", time: "30m" },
+    { id: 5, sender: "You",    text: "Fixed. Go ahead and merge.", time: "10m" },
   ],
 };
 
@@ -70,7 +70,7 @@ function ChannelList({
     <div className="flex-1 flex flex-col overflow-hidden" style={{ background: BG }}>
       {/* Header */}
       <div className="px-4 py-3 shrink-0" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <span className="text-[14px] font-semibold" style={{ color: T_PRI }}>Inbox</span>
+        <span className="text-demo-lg font-semibold" style={{ color: T_PRI }}>Inbox</span>
       </div>
 
       <div className="flex-1 overflow-y-auto py-2">
@@ -93,8 +93,8 @@ function ChannelList({
             onMouseEnter={e => { if (active !== ch.id) e.currentTarget.style.background = HOVER; }}
             onMouseLeave={e => { if (active !== ch.id) e.currentTarget.style.background = "transparent"; }}
           >
-            <span className="text-[14px] shrink-0" style={{ color: T_DIM }}>#</span>
-            <span className="text-[14px] flex-1 truncate">{ch.label}</span>
+            <span className="text-demo-lg shrink-0" style={{ color: T_DIM }}>#</span>
+            <span className="text-demo-lg flex-1 truncate">{ch.label}</span>
             {ch.unread > 0 && <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />}
           </button>
         ))}
@@ -112,20 +112,19 @@ function ChatPane({
 }) {
   const [extraMessages, setExtraMessages] = useState<ChatMsg[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [prevChannelId, setPrevChannelId] = useState(channelId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Derived state reset — React-recommended pattern for resetting on prop change
+  if (prevChannelId !== channelId) {
+    setPrevChannelId(channelId);
+    setExtraMessages([]);
+    setInputValue("");
+  }
 
   const baseMessages = CHANNEL_MESSAGES[channelId] ?? [];
   const messages = [...baseMessages, ...extraMessages];
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length, channelId]);
-
-  // Reset extra messages when channel changes
-  useEffect(() => {
-    setExtraMessages([]);
-    setInputValue("");
-  }, [channelId]);
 
   const handleSend = () => {
     const text = inputValue.trim();

@@ -35,12 +35,12 @@ const ALL_EVENTS: CalEvent[] = [
   { id: "e1",  title: "Team Standup",    subtitle: "Engineering · Daily", day: 0, startH: 9,    durationH: 0.5, palette: PALETTE.indigo  },
   { id: "e2",  title: "Team Standup",    subtitle: "Engineering · Daily", day: 1, startH: 9,    durationH: 0.5, palette: PALETTE.indigo  },
   { id: "e3",  title: "Team Standup",    subtitle: "Engineering · Daily", day: 2, startH: 9,    durationH: 0.5, palette: PALETTE.indigo  },
-  { id: "e4",  title: "Design Review",   subtitle: "with Siddhant",       day: 2, startH: 11,   durationH: 1,   palette: PALETTE.teal    },
+  { id: "e4",  title: "Design Review",   subtitle: "with Jordan",       day: 2, startH: 11,   durationH: 1,   palette: PALETTE.teal    },
   { id: "e5",  title: "1:1 with Sarah",  subtitle: "Product sync",        day: 2, startH: 14,   durationH: 1,   palette: PALETTE.emerald },
   { id: "e6",  title: "Sprint Planning", subtitle: "Sprint 15 kickoff",   day: 3, startH: 10,   durationH: 1.5, palette: PALETTE.indigo  },
-  { id: "e7",  title: "Investor Update", subtitle: "Monthly · Abhi",      day: 3, startH: 15,   durationH: 1,   palette: PALETTE.teal    },
+  { id: "e7",  title: "Investor Update", subtitle: "Monthly · Alex",      day: 3, startH: 15,   durationH: 1,   palette: PALETTE.teal    },
   { id: "e8",  title: "AI Demo Prep",    subtitle: "Landing page review", day: 4, startH: 13,   durationH: 2,   palette: PALETTE.teal    },
-  { id: "e9",  title: "Lunch — Meet",                                      day: 1, startH: 12.5, durationH: 1,   palette: PALETTE.emerald },
+  { id: "e9",  title: "Lunch — Casey",                                      day: 1, startH: 12.5, durationH: 1,   palette: PALETTE.emerald },
   { id: "e10", title: "API Review",      subtitle: "v1.2 endpoints",      day: 0, startH: 11,   durationH: 1.5, palette: PALETTE.teal    },
 ];
 

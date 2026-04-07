@@ -33,21 +33,21 @@ const EMAILS: Email[] = [
   },
   {
     id: 2,
-    sender: "Siddhant Chaudry",
+    sender: "Jordan Lee",
     avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=Siddhant&backgroundColor=0ea5e9",
     subject: "Design review notes — action items inside",
     body: [
       "Hey,",
       "Quick recap of today's design review. Action items: update onboarding illustrations, tighten spacing in the dashboard header, and revisit empty states.",
       "Let me know if you want to sync before the handoff.",
-      "Siddhant",
+      "Jordan",
     ],
     time: "45m",
     unread: true,
   },
   {
     id: 3,
-    sender: "Meet Kotadiya",
+    sender: "Jordan Micheal",
     avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=MeetK&backgroundColor=0f766e",
     subject: "PR #48 approved — landing page hero",
     body: [
@@ -61,7 +61,7 @@ const EMAILS: Email[] = [
   },
   {
     id: 4,
-    sender: "Abhi Sharma",
+    sender: "Casey Stark",
     avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed",
     subject: "Shipping v1.2 next week — heads up",
     body: [
