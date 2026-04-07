@@ -13,8 +13,7 @@ export default function MainDemo() {
   const [activeFileId, setActiveFileId] = useState<string>("f1");
 
   return (
-    <div className="w-full h-180 mt-5 rounded-lg overflow-hidden font-geist bg-[#111213] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_32px_80px_rgba(0,0,0,0.8)]">
-      <div className="h-full flex rounded-lg overflow-hidden border border-white/6">
+    <div className="w-full h-180 mt-5 rounded-lg overflow-hidden font-geist bg-[#111213] shadow-xl shadow-black flex border border-white/6">
         <Sidebar
           activeView={activeView}
           onViewChange={setActiveView}
@@ -31,7 +30,6 @@ export default function MainDemo() {
           {activeView === "docs"     && <DocsView activeFileId={activeFileId} />}
           {activeView === "calendar" && <CalendarView />}
         </div>
-      </div>
     </div>
   );
 }

@@ -7,16 +7,18 @@ const CX = VW / 2;
 const CY = VH / 2;
 
 const NODES_DESKTOP = [
-  { id: "mail",      label: "Mail",      x: 100, y: 130 },
+  { id: "mail",      label: "Mail",      x: 100, y: 150 },
   { id: "calendar",  label: "Calendar",  x: 100, y: 330 },
-  { id: "messages",  label: "Messages",  x: 700, y: 130 },
+  { id: "projects",  label: "Projects",  x: 400, y: 55  },
+  { id: "messages",  label: "Messages",  x: 700, y: 150 },
   { id: "files",     label: "Files",     x: 700, y: 330 },
 ];
 
 const PATHS_DESKTOP: Record<string, string> = {
-  mail:     `M 100 130 C 220 130 320 200 ${CX} ${CY}`,
+  mail:     `M 100 150 C 220 150 320 200 ${CX} ${CY}`,
   calendar: `M 100 330 C 220 330 320 260 ${CX} ${CY}`,
-  messages: `M 700 130 C 580 130 480 200 ${CX} ${CY}`,
+  projects: `M 400  55 C 400 130 400 180 ${CX} ${CY}`,
+  messages: `M 700 150 C 580 150 480 200 ${CX} ${CY}`,
   files:    `M 700 330 C 580 330 480 260 ${CX} ${CY}`,
 };
 
@@ -60,11 +62,23 @@ function FilesIcon({ size }: { size: number }) {
   );
 }
 
+function ProjectsIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/>
+      <rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>
+  );
+}
+
 const ICON_COMPONENTS: Record<string, React.FC<{ size: number }>> = {
   mail: MailIcon,
   calendar: CalendarIcon,
   messages: MessagesIcon,
   files: FilesIcon,
+  projects: ProjectsIcon,
 };
 
 // ── Desktop: Flowing beam ─────────────────────────────────────────────────
@@ -254,20 +268,20 @@ function MobileDiagramGrid() {
     <div style={{
       display: "grid",
       gridTemplateColumns: "auto 1fr auto 1fr auto",
-      gridTemplateRows: "auto 36px auto 36px auto",
+      gridTemplateRows: "auto 28px auto 28px auto 36px auto",
       alignItems: "center",
       justifyItems: "center",
       padding: "28px 20px 24px",
       gap: 0,
     }}>
-      {/* Row 0 */}
+      {/* Row 0: mail | gap | projects (top-center) | gap | messages */}
       <MobileIntegrationTile id="mail"     label="Mail"     delay={0.1} />
       <div />
+      <MobileIntegrationTile id="projects" label="Projects" delay={0.2} />
       <div />
-      <div />
-      <MobileIntegrationTile id="messages" label="Messages"  delay={0.3} />
+      <MobileIntegrationTile id="messages" label="Messages" delay={0.3} />
 
-      {/* Row 1: v-arm centered */}
+      {/* Row 1: v-arm from projects to hub */}
       <div />
       <div />
       <MobileArm direction="v" delay={0.15} />
@@ -281,19 +295,25 @@ function MobileDiagramGrid() {
       <MobileArm direction="h" delay={0.5} />
       <div />
 
-      {/* Row 3: v-arm centered */}
+      {/* Row 3: v-arm downward */}
       <div />
       <div />
       <MobileArm direction="v" delay={0.4} />
       <div />
       <div />
 
-      {/* Row 4 */}
+      {/* Row 4: calendar (left of center) | gap | empty-center | gap | files (right) */}
       <MobileIntegrationTile id="calendar" label="Calendar" delay={0.2} />
       <div />
       <div />
       <div />
       <MobileIntegrationTile id="files"    label="Files"    delay={0.15} />
+
+      {/* Row 5: empty */}
+      <div /><div /><div /><div /><div />
+
+      {/* Row 6: empty bottom padding */}
+      <div /><div /><div /><div /><div />
     </div>
   );
 }
@@ -320,7 +340,7 @@ export default function IntegrationsCard() {
         <div>
           <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Everything flows into one place</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-[#606068]">
-            Connect your tools once. Mail, calendar, messages, and files — all pulled into Cube so nothing slips through.
+            Connect your tools once. Mail, calendar, messages, projects, and files — all pulled into Cube so nothing slips through.
           </p>
         </div>
       </div>

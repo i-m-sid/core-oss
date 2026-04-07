@@ -28,7 +28,7 @@ function ScaledDesktopDemo() {
   }, []);
 
   return (
-    <div ref={wrapRef} className="w-full overflow-hidden h-250">
+    <div ref={wrapRef} className="w-full overflow-hidden h-220">
       <div style={{ transform: `scale(${scale})`, transformOrigin: "top left", width: `${DEMO_W}px` }}>
         <MainDemo />
       </div>
@@ -48,7 +48,7 @@ function renderMobileView(view: MobileView) {
 
 export default function HeroSection({ onGetStarted }: HeroSectionProps) {
   return (
-    <section className="relative w-full overflow-x-hidden font-geist bg-black">
+    <section className="relative w-full overflow-x-hidden font-geist ">
 
       {/* Background video */}
       <div

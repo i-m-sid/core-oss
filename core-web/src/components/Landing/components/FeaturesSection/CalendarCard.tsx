@@ -3,8 +3,17 @@ import { motion, AnimatePresence } from "motion/react";
 
 const SHORTCUTS = [
   {
-    action: "Compose new email",
-    keys: ["⌘", "N"],
+    action: "Go to Chat",
+    keys: ["G", "C"],
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+    ),
+  },
+  {
+    action: "Go to Inbox",
+    keys: ["G", "I"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -13,27 +22,18 @@ const SHORTCUTS = [
     ),
   },
   {
-    action: "Archive selected",
-    keys: ["E"],
+    action: "Go to Projects",
+    keys: ["G", "P"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/>
-        <line x1="10" y1="12" x2="14" y2="12"/>
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>
     ),
   },
   {
-    action: "Mark as important",
-    keys: ["⌘", "I"],
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-      </svg>
-    ),
-  },
-  {
-    action: "Search emails",
-    keys: ["⌘", "F"],
+    action: "Quick search",
+    keys: ["⌘", "K"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -41,11 +41,11 @@ const SHORTCUTS = [
     ),
   },
   {
-    action: "Reply",
-    keys: ["R"],
+    action: "Go to Calendar",
+    keys: ["G", "L"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
+        <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
       </svg>
     ),
   },
@@ -87,7 +87,7 @@ export default function CalendarCard() {
         <div>
           <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Lightning fast navigation</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-[#606068]">
-            Navigate your entire workspace with keyboard shortcuts. No mouse needed — just type and act.
+            Jump between chat, inbox, projects, and calendar instantly. No mouse needed — your whole workspace at your fingertips.
           </p>
         </div>
       </div>

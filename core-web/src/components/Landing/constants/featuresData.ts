@@ -2,7 +2,7 @@
 
 export const FEATURES_HEADING = "Work smarter, together.";
 export const FEATURES_SUBHEADING =
-  "Cube connects everything you need — AI that acts, a shared inbox for your team, and a calendar that keeps everyone aligned.";
+  "One workspace for your team's email, projects, chat, and calendar — with AI that doesn't just assist, it acts. Less tab-switching, more getting things done.";
 
 // ── AI Chat card: cycling prompts ──────────────────────────────────────────
 

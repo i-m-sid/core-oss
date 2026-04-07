@@ -9,7 +9,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || "";
 
 function GoogleIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true">
       <path d="M19.6 10.23c0-.68-.06-1.36-.17-2.02H10v3.82h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.89-1.74 2.98-4.3 2.98-7.32Z" fill="#4285F4" />
       <path d="M10 20c2.7 0 4.96-.89 6.62-2.42l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H1.07v2.58A9.99 9.99 0 0 0 10 20Z" fill="#34A853" />
       <path d="M4.42 11.91A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.91V5.51H1.07A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.07 4.49l3.35-2.58Z" fill="#FBBC05" />
@@ -20,7 +20,7 @@ function GoogleIcon() {
 
 function MicrosoftIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" aria-hidden="true">
+    <svg width="17" height="17" viewBox="0 0 21 21" fill="none" aria-hidden="true">
       <rect x="1" y="1" width="9" height="9" fill="#F25022" />
       <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
       <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
@@ -28,6 +28,7 @@ function MicrosoftIcon() {
     </svg>
   );
 }
+
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -95,76 +96,75 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.22 }}
           className="fixed inset-0 z-[100] flex items-center justify-center px-4"
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-md"
+            className="absolute inset-0 bg-black/75 backdrop-blur-md"
             onClick={onClose}
           />
 
           {/* Card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 8 }}
+            initial={{ opacity: 0, scale: 0.97, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 8 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative w-full max-w-[380px] rounded-2xl overflow-hidden font-geist"
+            exit={{ opacity: 0, scale: 0.97, y: 10 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="relative w-full font-geist overflow-hidden rounded-2xl"
             style={{
+              maxWidth: 500,
               background: "#111213",
-              boxShadow: "0 0 0 1px rgba(255,255,255,0.08), 0 24px 60px rgba(0,0,0,0.8), 0 0 80px rgba(99,102,241,0.08)",
+              boxShadow: "0 0 0 1px rgba(255,255,255,0.07), 0 32px 80px rgba(0,0,0,0.85)",
             }}
           >
-            {/* Subtle top glow */}
-            <div
-              className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-px"
-              style={{ background: "linear-gradient(to right, transparent, rgba(99,102,241,0.6), transparent)" }}
-            />
+            <div className="relative flex flex-col px-12 pt-14 pb-12">
 
-            <div className="px-8 pt-8 pb-7">
-              {/* Close button */}
+              {/* Close */}
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 p-1.5 rounded-lg cursor-pointer transition-colors"
-                style={{ color: "#505056" }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#a0a0a6"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#505056"}
+                style={{ color: "#404046" }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#909098"}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#404046"}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
 
-              {/* Logo + title */}
-              <div className="flex flex-col items-center text-center mb-7">
+              {/* Logo + heading */}
+              <div className="flex flex-col items-center text-center mb-10">
                 <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 p-2.5"
-                  style={{ background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.2)" }}
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-6 p-2.5"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
                 >
-                  <img src="/cube-logo-white.svg" alt="Cube" className="w-full h-full object-contain" />
+                  <img src="/cube-logo-white.svg" alt="Cube" className="w-full h-full object-contain opacity-90" />
                 </div>
-                <h2 className="text-[19px] font-semibold tracking-tight" style={{ color: "#e8e8ea" }}>
-                  Sign in to Cube
+                <h2 className="text-[24px] font-semibold leading-[1.2] tracking-[-0.5px]" style={{ color: "#eeeef0" }}>
+                  Everything your team<br />needs, in one place.
                 </h2>
-                <p className="mt-1.5 text-[13px]" style={{ color: "#606066" }}>
-                  Choose your account to continue
-                </p>
               </div>
 
-              {/* Buttons */}
+              {/* Auth buttons */}
               <div className="flex flex-col gap-2.5">
                 <button
                   onClick={() => handleSignIn("google")}
                   disabled={buttonsDisabled}
-                  className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-[14px] font-medium cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-[11px] rounded-xl text-[13.5px] font-medium cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{
-                    background: "rgba(255,255,255,0.06)",
+                    background: "rgba(255,255,255,0.05)",
                     border: "1px solid rgba(255,255,255,0.08)",
-                    color: "#e8e8ea",
+                    color: "#d8d8dc",
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.10)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"; }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.09)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.13)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                  }}
                 >
                   <GoogleIcon />
                   Continue with Google
@@ -173,14 +173,20 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 <button
                   onClick={() => handleSignIn("microsoft")}
                   disabled={buttonsDisabled}
-                  className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-[14px] font-medium cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-[11px] rounded-xl text-[13.5px] font-medium cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{
-                    background: "rgba(255,255,255,0.06)",
+                    background: "rgba(255,255,255,0.05)",
                     border: "1px solid rgba(255,255,255,0.08)",
-                    color: "#e8e8ea",
+                    color: "#d8d8dc",
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.10)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)"; }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.09)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.13)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                  }}
                 >
                   <MicrosoftIcon />
                   Continue with Microsoft
@@ -199,11 +205,22 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 </div>
               )}
 
-              <p className="mt-6 text-center text-[11.5px]" style={{ color: "#404046" }}>
+              {/* Terms */}
+              <p className="mt-6 text-center text-[11px]" style={{ color: "#38383e" }}>
                 By continuing, you agree to Cube's{" "}
-                <span className="underline underline-offset-2 cursor-pointer" style={{ color: "#606066" }}>Terms</span>
+                <span
+                  className="cursor-pointer"
+                  style={{ color: "#555560" }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#909098"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#555560"}
+                >Terms</span>
                 {" "}and{" "}
-                <span className="underline underline-offset-2 cursor-pointer" style={{ color: "#606066" }}>Privacy Policy</span>
+                <span
+                  className="cursor-pointer"
+                  style={{ color: "#555560" }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#909098"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#555560"}
+                >Privacy Policy</span>
               </p>
             </div>
           </motion.div>
