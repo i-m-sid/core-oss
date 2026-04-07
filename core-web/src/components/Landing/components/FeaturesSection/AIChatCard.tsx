@@ -82,7 +82,96 @@ function ActionIcon({ actionKey, color }: { actionKey: AIChatActionKey; color: s
   }
 }
 
-// ── Action card sub-component ─────────────────────────────────────────────
+// ── Per-action card bodies ────────────────────────────────────────────────
+
+function SummariseBody({ isDone }: { isDone: boolean }) {
+  return (
+    <div className="mt-3 space-y-2">
+      {[["w-full", false], ["w-4/5", false], ["w-1/2", true]].map(([w, short], i) => (
+        <div key={i} className={`h-[3px] rounded-full transition-all duration-500 ${w} ${isDone ? "bg-indigo-400/40" : short ? "bg-white/8" : "bg-white/14"}`} />
+      ))}
+    </div>
+  );
+}
+
+function DraftReplyBody({ isDone }: { isDone: boolean }) {
+  return (
+    <div className="mt-3 space-y-2">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded-full bg-teal-600/70 flex items-center justify-center text-[7px] font-bold text-white shrink-0">M</div>
+        <div className={`h-[3px] flex-1 rounded-full transition-all duration-500 ${isDone ? "bg-violet-400/40" : "bg-white/12"}`} />
+      </div>
+      <div className={`h-[3px] w-4/5 rounded-full transition-all duration-500 ${isDone ? "bg-violet-400/30" : "bg-white/8"}`} />
+      <div className={`h-[3px] w-3/5 rounded-full transition-all duration-500 ${isDone ? "bg-violet-400/20" : "bg-white/6"}`} />
+    </div>
+  );
+}
+
+function MoveToDoneBody({ isDone }: { isDone: boolean }) {
+  return (
+    <div className="mt-3 flex gap-2">
+      <div className="flex-1">
+        <div className="text-[8px] text-white/20 mb-1.5">In Progress</div>
+        <div className={`h-6 rounded-md flex items-center px-2 transition-all duration-500 border ${isDone ? "opacity-0 border-white/5 bg-white/3" : "opacity-100 border-white/8 bg-white/5"}`}>
+          <span className="text-[8px] text-white/35 truncate">Onboarding</span>
+        </div>
+      </div>
+      <div className="flex-1">
+        <div className={`text-[8px] mb-1.5 transition-colors duration-300 ${isDone ? "text-emerald-400/50" : "text-white/20"}`}>Done</div>
+        <div className={`h-6 rounded-md flex items-center px-2 transition-all duration-500 border ${isDone ? "opacity-100 border-emerald-500/25 bg-emerald-500/8" : "opacity-0 border-white/5 bg-white/3"}`}>
+          <span className="text-[8px] text-emerald-400/70 truncate">Onboarding</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BlockTimeBody({ isDone }: { isDone: boolean }) {
+  const slots = [
+    { label: "9",  h: "h-3", filled: false },
+    { label: "10", h: "h-7", filled: true  },
+    { label: "11", h: "h-7", filled: true  },
+    { label: "12", h: "h-4", filled: false },
+  ];
+  return (
+    <div className="mt-3 flex gap-1.5 items-end">
+      {slots.map((s) => (
+        <div key={s.label} className="flex-1 flex flex-col items-center gap-1">
+          <div className={`w-full rounded-sm transition-all duration-500 ${s.h} ${
+            s.filled
+              ? isDone ? "bg-amber-400/35 border border-amber-400/25" : "bg-white/10 border border-white/6"
+              : "bg-white/5"
+          }`} />
+          <span className="text-[7px] text-white/18">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FindDocBody({ isDone }: { isDone: boolean }) {
+  const files = ["Design Brief", "Sprint 14 Notes", "Onboarding Flow"];
+  return (
+    <div className="mt-3 space-y-1">
+      {files.map((f) => {
+        const isMatch = f === "Sprint 14 Notes";
+        return (
+          <div
+            key={f}
+            className={`flex items-center gap-2 py-1 px-1.5 rounded-md transition-all duration-500 ${isMatch && isDone ? "bg-cyan-500/8" : ""}`}
+          >
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke={isMatch && isDone ? "#22d3ee" : "rgba(255,255,255,0.18)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span className={`text-[9px] transition-colors duration-300 ${isMatch && isDone ? "text-cyan-400/80" : "text-white/22"}`}>{f}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Action card wrapper ───────────────────────────────────────────────────
 
 type ActionCardProps = {
   action: AIChatAction;
@@ -98,42 +187,38 @@ function ActionCard({ action, isActive, isDone }: ActionCardProps) {
         background: isActive ? "#18191c" : "#141517",
         borderColor: isActive ? BORDER_ACTIVE[action.color] : "rgba(255,255,255,0.05)",
         boxShadow: isActive ? SHADOW_ACTIVE[action.color] : "none",
-        opacity: isActive ? 1 : 0.3,
+        opacity: isActive ? 1 : 0.28,
         transform: isActive ? "translateY(-4px) scale(1.02)" : "translateY(0) scale(1)",
       }}
     >
-      {/* Card header */}
-      <div className="flex items-center gap-2 mb-4">
-        <div
-          className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
-          style={{ background: ICON_BG[action.color] }}
-        >
+      {/* Header — icon bare, no bg */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <ActionIcon actionKey={action.key} color={action.color} />
+          <span className="text-[12px] font-medium text-[#c8c8cc]">{action.key}</span>
         </div>
-        <span className="text-[12px] font-medium text-[#c8c8cc]">{action.key}</span>
+        <div
+          className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full inline-flex items-center gap-1 transition-all duration-300"
+          style={{
+            background: isDone ? ICON_BG[action.color] : "transparent",
+            color: isDone ? ICON_COLOR[action.color] : "#2e2e34",
+          }}
+        >
+          {isDone && (
+            <svg width="7" height="7" viewBox="0 0 16 16" fill="none">
+              <polyline points="3 8 6.5 11.5 13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          )}
+          {isDone ? action.doneLabel : "···"}
+        </div>
       </div>
 
-      {/* Done badge */}
-      <div
-        className="text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 transition-all duration-300"
-        style={{
-          background: isDone ? ICON_BG[action.color] : "rgba(255,255,255,0.04)",
-          color: isDone ? ICON_COLOR[action.color] : "#3a3a40",
-        }}
-      >
-        {isDone && (
-          <svg width="8" height="8" viewBox="0 0 16 16" fill="none">
-            <polyline points="3 8 6.5 11.5 13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        )}
-        {isDone ? action.doneLabel : "Waiting"}
-      </div>
-
-      {/* Footer */}
-      <div className="mt-4 flex justify-between font-mono text-[10px]" style={{ color: "#404048" }}>
-        <span>{action.footerLeft}</span>
-        <span style={{ color: isDone ? ICON_COLOR[action.color] : "#404048" }}>{action.footerRight}</span>
-      </div>
+      {/* Contextual body */}
+      {action.key === "Summarise"    && <SummariseBody    isDone={isDone} />}
+      {action.key === "Draft reply"  && <DraftReplyBody   isDone={isDone} />}
+      {action.key === "Move to Done" && <MoveToDoneBody   isDone={isDone} />}
+      {action.key === "Block time"   && <BlockTimeBody    isDone={isDone} />}
+      {action.key === "Find doc"     && <FindDocBody      isDone={isDone} />}
     </div>
   );
 }
@@ -198,7 +283,7 @@ export default function AIChatCard() {
         <div>
           <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Ask Cube AI anything</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-[#606068]">
-            Cube understands your inbox, calendar, and projects. Type a prompt and it acts — no copy-pasting, no switching tabs.
+            Cube understands your Slack, inbox, calendar, emails, projects, and files. Type a prompt and it acts — no copy-pasting, no switching tabs.
           </p>
         </div>
       </div>
@@ -294,42 +379,40 @@ export default function AIChatCard() {
       </div>
 
       {/* ── Desktop layout ── */}
-      <div className="hidden md:flex items-center justify-center py-24 px-4">
-        <div className="relative w-full max-w-[820px]">
+      <div className="hidden md:flex items-center justify-center py-8 px-4">
+        <div className="relative w-full max-w-[940px] h-[380px]">
 
-          {/* Card grid: 3 top */}
-          <div className="grid grid-cols-3 gap-5 mb-6">
-            {AI_CHAT_ACTIONS.slice(0, 3).map((action) => {
-              const isActive = action.key === step.activeCard && phase !== "typing";
-              const isDone   = action.key === step.activeCard && phase === "result";
-              return (
-                <ActionCard
-                  key={action.key}
-                  action={action}
-                  isActive={isActive}
-                  isDone={isDone}
-                />
-              );
-            })}
-          </div>
+          {/* Scattered action cards — absolute positioned */}
+          {[
+            // top-left
+            { index: 0, cls: "top-0 left-0" },
+            // top-center
+            { index: 1, cls: "top-0 left-1/2 -translate-x-1/2" },
+            // top-right
+            { index: 2, cls: "top-0 right-0" },
+            // bottom-left
+            { index: 3, cls: "bottom-0 left-8" },
+            // bottom-right
+            { index: 4, cls: "bottom-0 right-8" },
+          ].map(({ index, cls }) => {
+            const action   = AI_CHAT_ACTIONS[index];
+            const isActive = action.key === step.activeCard && phase !== "typing";
+            const isDone   = action.key === step.activeCard && phase === "result";
+            return (
+              <div key={action.key} className={`absolute w-[260px] ${cls}`}>
+                <ActionCard action={action} isActive={isActive} isDone={isDone} />
+              </div>
+            );
+          })}
 
-          {/* Bottom row: 2 cards flanking the prompt */}
-          <div className="grid grid-cols-[1fr_auto_1fr] gap-5 items-center">
-            {(() => {
-              const action   = AI_CHAT_ACTIONS[3];
-              const isActive = action.key === step.activeCard && phase !== "typing";
-              const isDone   = action.key === step.activeCard && phase === "result";
-              return <ActionCard key={action.key} action={action} isActive={isActive} isDone={isDone} />;
-            })()}
-
-            {/* Prompt box */}
+          {/* Prompt box — centered */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-[300px]">
             <div
-              className="z-40 w-[320px] rounded-2xl border border-white/[0.08] bg-[#1a1b1e]/90 backdrop-blur-xl"
+              className="rounded-2xl border border-white/[0.08] bg-[#1a1b1e]/90 backdrop-blur-xl transition-shadow duration-500"
               style={{
                 boxShadow: phase === "result"
                   ? "0 16px 48px rgba(0,0,0,0.6)"
                   : "0 4px 16px rgba(0,0,0,0.4)",
-                transition: "box-shadow 400ms",
               }}
             >
               <div className="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-white/[0.05]">
@@ -337,7 +420,7 @@ export default function AIChatCard() {
                 <span className="text-[11px] font-medium text-[#505058]">Cube AI</span>
                 <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
               </div>
-              <div className="relative min-h-[100px] p-4 pb-12">
+              <div className="relative min-h-[96px] p-4 pb-12">
                 <p className="text-[14px] leading-relaxed text-[#e0e0e4] font-medium whitespace-pre-wrap">
                   {typedPrompt}
                   {phase === "typing" && (
@@ -359,14 +442,8 @@ export default function AIChatCard() {
                 </div>
               </div>
             </div>
-
-            {(() => {
-              const action   = AI_CHAT_ACTIONS[4];
-              const isActive = action.key === step.activeCard && phase !== "typing";
-              const isDone   = action.key === step.activeCard && phase === "result";
-              return <ActionCard key={action.key} action={action} isActive={isActive} isDone={isDone} />;
-            })()}
           </div>
+
         </div>
       </div>
     </motion.div>
