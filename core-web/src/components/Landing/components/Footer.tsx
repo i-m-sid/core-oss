@@ -19,7 +19,7 @@ const LINKS = {
 export default function Footer() {
   return (
     <motion.footer
-      className="w-full border-t border-white/[0.05] bg-black pt-20 pb-10 font-geist"
+      className="w-full border-t border-white/5 bg-black/90 pt-20 pb-10 font-geist"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-120px" }}

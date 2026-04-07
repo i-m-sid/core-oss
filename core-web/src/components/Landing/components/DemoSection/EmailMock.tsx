@@ -35,44 +35,44 @@ const emails: Email[] = [
   },
   {
     id: 2,
-    sender: "Siddhant Chaudry",
-    avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=Siddhant&backgroundColor=0ea5e9",
+    sender: "Jordan Rivera",
+    avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=JordanR&backgroundColor=0ea5e9",
     subject: "Design review notes — action items inside",
     body: [
       "Hey,",
       "Quick recap of what we covered in today's design review. Action items: update the onboarding illustrations, tighten spacing in the dashboard header, and revisit the empty states.",
       "Let me know if you want to sync before the handoff.",
-      "Siddhant",
+      "Jordan",
     ],
     time: "45m",
     unread: true,
   },
   {
     id: 3,
-    sender: "Meet Kotadiya",
-    avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=MeetK&backgroundColor=0f766e",
+    sender: "Casey Morgan",
+    avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=CaseyM&backgroundColor=0f766e",
     subject: "PR #48 approved — landing page hero",
     body: [
       "Hey,",
       "The landing page hero redesign PR got approved by both reviewers. It's ready to merge whenever you are.",
       "Also flagged a small z-index issue on mobile — added a comment on the PR.",
-      "Meet",
+      "Casey",
     ],
     time: "3h",
     unread: false,
   },
   {
     id: 4,
-    sender: "Abhi Sharma",
-    avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed",
-    subject: "Shipping v1.2 next week — heads up",
+    sender: "Sarah Chen",
+    avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=SarahC&backgroundColor=f59e0b",
+    subject: "Q2 roadmap — need your sign-off by Friday",
     body: [
-      "Team,",
-      "We're targeting v1.2 for release next Wednesday. The build is stable and QA signed off this morning.",
-      "Make sure your in-progress items are merged or moved to the next cycle by EOD Monday.",
-      "Abhi",
+      "Hey,",
+      "The Q2 roadmap doc is ready for final review. I need your sign-off by Friday EOD so we can lock it before the all-hands.",
+      "Let me know if you have questions on the agent builder timeline.",
+      "Sarah",
     ],
-    time: "1d",
+    time: "1h",
     unread: false,
   },
   {
@@ -95,9 +95,9 @@ const emails: Email[] = [
 
 const AI_SUMMARIES: Record<number, string> = {
   1: "Ideavo builds complete production apps from a prompt — one-click publish, real code. Not prototypes.",
-  2: "Design review recap from Siddhant. 3 action items: illustrations, header spacing, empty states.",
-  3: "Meet says PR #48 is approved and ready to merge. Small mobile z-index issue noted in comments.",
-  4: "Abhi is targeting v1.2 release Wednesday. All in-progress work must be merged by EOD Monday.",
+  2: "Design review recap from Jordan. 3 action items: illustrations, header spacing, empty states.",
+  3: "Casey says PR #48 is approved and ready to merge. Small mobile z-index issue noted in comments.",
+  4: "Sarah needs your sign-off on the Q2 roadmap by Friday EOD before the all-hands.",
   5: "Ideavo can build full production apps from a prompt and publish in one click. No dev needed.",
 };
 
@@ -110,19 +110,19 @@ const AI_DRAFTS: Record<number, Record<ReplyTone, string>> = {
     Brief:    "Love it. Trying it out now.",
   },
   2: {
-    Formal:   "Hi Siddhant, thank you for the detailed recap. I will action the noted items — onboarding illustrations, dashboard header spacing, and empty states — and reach out before handoff.",
-    Friendly: "Thanks Siddhant! Super helpful. I'll start with the onboarding illustrations. Let's sync Wednesday before you hand off?",
+    Formal:   "Hi Jordan, thank you for the detailed recap. I will action the noted items — onboarding illustrations, dashboard header spacing, and empty states — and reach out before handoff.",
+    Friendly: "Thanks Jordan! Super helpful. I'll start with the onboarding illustrations. Let's sync Wednesday before you hand off?",
     Brief:    "Got it. I'll action the items and ping you before handoff.",
   },
   3: {
-    Formal:   "Hi Meet, thank you for the update. I will review the mobile z-index comment and proceed with the merge shortly.",
-    Friendly: "Nice one Meet! Merging now — I'll check that z-index comment before pushing 🎉",
+    Formal:   "Hi Casey, thank you for the update. I will review the mobile z-index comment and proceed with the merge shortly.",
+    Friendly: "Nice one Casey! Merging now — I'll check that z-index comment before pushing 🎉",
     Brief:    "Merging now, will check the z-index issue.",
   },
   4: {
-    Formal:   "Hi Abhi, noted on the v1.2 release timeline. I will ensure all in-progress items are merged or moved to the next cycle by EOD Monday.",
-    Friendly: "Exciting! I'll make sure everything's squared away by Monday EOD. Can't wait to ship this 🚀",
-    Brief:    "Got it — will wrap up by Monday EOD.",
+    Formal:   "Hi Sarah, noted. I will review the full Q2 roadmap doc and provide my sign-off before Friday EOD.",
+    Friendly: "On it Sarah! Reading through now — will add my sign-off by EOD. Let's align on the agent builder timeline at our 2pm.",
+    Brief:    "Got it — sign-off by Friday EOD.",
   },
   5: {
     Formal:   "Thank you for the prompt. I will explore Ideavo's app-building capabilities and evaluate it for our next project.",
@@ -131,7 +131,7 @@ const AI_DRAFTS: Record<number, Record<ReplyTone, string>> = {
   },
 };
 
-const ME_AVATAR = "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed";
+const ME_AVATAR = "https://api.dicebear.com/9.x/notionists/svg?seed=AlexP&backgroundColor=7c3aed";
 
 export default function EmailView() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -190,7 +190,7 @@ export default function EmailView() {
               onMouseLeave={ev => { if (e.id !== activeId) (ev.currentTarget as HTMLElement).style.background = "transparent"; }}
             >
               {/* Photo avatar */}
-              <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-[#2a2a2e] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-neutral-100 flex items-center justify-center">
                 <img
                   src={e.avatar}
                   alt={e.sender}
@@ -251,7 +251,7 @@ export default function EmailView() {
         <div className="flex-1 overflow-y-auto px-6 py-5">
           {/* Sender row */}
           <div className="flex items-start gap-3 mb-5">
-            <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-[#2a2a2e] flex items-center justify-center mt-0.5">
+            <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-neutral-50 flex items-center justify-center mt-0.5">
               <img
                 src={active.avatar}
                 alt={active.sender}

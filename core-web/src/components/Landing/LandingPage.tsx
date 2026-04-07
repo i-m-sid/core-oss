@@ -5,6 +5,8 @@ import SignInModal from "./components/SignInModal";
 import HeroSection from "./sections/HeroSection";
 import CustomerLogosSection from "./sections/CustomerLogosSection";
 import FeaturesSection from "./sections/FeaturesSection";
+import FaqSection from "./sections/FaqSection";
+import CtaSection from "./sections/CtaSection";
 
 export default function LandingPage() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -17,6 +19,8 @@ export default function LandingPage() {
         <HeroSection onGetStarted={() => setShowSignIn(true)} />
         <CustomerLogosSection />
         <FeaturesSection />
+        <FaqSection />
+        <CtaSection onGetStarted={() => setShowSignIn(true)} />
       </main>
 
       <Footer />

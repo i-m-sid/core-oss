@@ -9,107 +9,101 @@ const T_DIM  = "#505056";
 const ACTIVE = "rgba(255,255,255,0.08)";
 const HOVER  = "rgba(255,255,255,0.04)";
 
-// Logged-in user — the viewer
 const ME = "You";
 
 const AVATARS: Record<string, string> = {
-  Siddhant: "https://api.dicebear.com/9.x/notionists/svg?seed=Siddhant&backgroundColor=0ea5e9",
-  Meet:     "https://api.dicebear.com/9.x/notionists/svg?seed=MeetK&backgroundColor=0f766e",
-  Abhi:     "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed",
-  You:      "https://api.dicebear.com/9.x/notionists/svg?seed=YouUser&backgroundColor=7c3aed",
+  Jordan: "https://api.dicebear.com/9.x/notionists/svg?seed=JordanR&backgroundColor=0ea5e9",
+  Casey:  "https://api.dicebear.com/9.x/notionists/svg?seed=CaseyM&backgroundColor=0f766e",
+  Sarah:  "https://api.dicebear.com/9.x/notionists/svg?seed=SarahC&backgroundColor=f59e0b",
+  You:    "https://api.dicebear.com/9.x/notionists/svg?seed=AlexP&backgroundColor=7c3aed",
 };
 
 interface ChatMsg {
   id: number;
-  sender: string; // always matches a key in AVATARS
+  sender: string;
   text: string;
   time: string;
 }
 
-// Group channels — Abhi is one of the participants
 const CHANNEL_MESSAGES: Record<string, ChatMsg[]> = {
-  general: [
-    { id: 0, sender: "Siddhant", text: "Pushed the new onboarding flow to staging — looks clean 🎉", time: "9m" },
-    { id: 1, sender: "Meet",     text: "Nice! Checked it on mobile too, feels smooth.", time: "8m" },
-    { id: 2, sender: "You",     text: "Great work. Let's keep this momentum for v1.2.", time: "6m" },
-    { id: 3, sender: "Siddhant", text: "Anyone free for a quick review call before we push to prod?", time: "4m" },
-    { id: 4, sender: "Meet",     text: "I'm free after 4pm 👍", time: "3m" },
-    { id: 5, sender: "You",     text: "Works for me. Setting up a Huddle at 4.", time: "1m" },
+  product: [
+    { id: 0, sender: "Sarah",  text: "Q2 roadmap doc is ready for final review — I need sign-off by Friday EOD.", time: "1h" },
+    { id: 1, sender: "Jordan", text: "Design section looks solid. Just added the updated specs to the doc.", time: "55m" },
+    { id: 2, sender: "You",    text: "Reading through it now. Will leave comments by EOD.", time: "40m" },
+    { id: 3, sender: "Casey",  text: "Engineering estimates are locked in. No blockers on our end.", time: "30m" },
+    { id: 4, sender: "You",    text: "Great. Sending my sign-off to Sarah tonight.", time: "10m" },
   ],
   design: [
-    { id: 0, sender: "Siddhant", text: "Updated the empty states — check Figma for the latest version.", time: "2h" },
-    { id: 1, sender: "You",     text: "Dashboard header spacing looks tight now, good call.", time: "1h" },
-    { id: 2, sender: "Siddhant", text: "Onboarding illustrations are next on my list.", time: "45m" },
-    { id: 3, sender: "Meet",     text: "Lmk when they're ready, I'll review before handoff.", time: "30m" },
-    { id: 4, sender: "You",     text: "Let's target handoff by end of week.", time: "20m" },
+    { id: 0, sender: "Jordan", text: "Handoff package is uploaded to Figma — all tokens are exported.", time: "3h" },
+    { id: 1, sender: "You",    text: "Looked through it. Component library looks super clean.", time: "2h" },
+    { id: 2, sender: "Jordan", text: "Thanks! The new card system should cut dev time significantly.", time: "1h" },
+    { id: 3, sender: "Casey",  text: "Already importing the tokens — this is going to speed things up.", time: "45m" },
+    { id: 4, sender: "You",    text: "Let's do a walkthrough Thursday before we start implementation.", time: "20m" },
   ],
   engineering: [
-    { id: 0, sender: "You",     text: "Build is stable, QA signed off this morning ✅", time: "5h" },
-    { id: 1, sender: "Meet",     text: "There's a z-index issue on mobile in the hero — clipped on Safari.", time: "3h" },
-    { id: 2, sender: "You",     text: "I'll take a look before merge. Good catch.", time: "2h" },
-    { id: 3, sender: "Meet",     text: "PR is approved btw — both reviewers signed off.", time: "1h" },
-    { id: 4, sender: "Siddhant", text: "Merging once the z-index is sorted 🚀", time: "30m" },
-    { id: 5, sender: "You",     text: "Fixed. Go ahead and merge.", time: "10m" },
+    { id: 0, sender: "Casey",  text: "PR #61 is approved by both reviewers — ready to merge.", time: "2h" },
+    { id: 1, sender: "You",    text: "On it. Checking the auth edge case you flagged first.", time: "1h" },
+    { id: 2, sender: "Casey",  text: "It's minor — just a null check missing on the callback.", time: "55m" },
+    { id: 3, sender: "You",    text: "Fixed and pushed. Go ahead and merge.", time: "30m" },
+    { id: 4, sender: "Casey",  text: "Merged and deployed to staging ✅", time: "15m" },
   ],
-  launches: [
-    { id: 0, sender: "You",     text: "v1.2 launch plan is locked — see Notion for the checklist.", time: "1d" },
-    { id: 1, sender: "Siddhant", text: "Design assets will be merged by Sunday EOD.", time: "20h" },
-    { id: 2, sender: "Meet",     text: "Engineering is green. Ready when you are.", time: "18h" },
-    { id: 3, sender: "You",     text: "Shipping Wednesday 🎯 Let's go.", time: "16h" },
+  general: [
+    { id: 0, sender: "Sarah",  text: "Welcome to the new workspace! Pinned the onboarding doc in #product.", time: "1d" },
+    { id: 1, sender: "Jordan", text: "Love the new sidebar. Really clean.", time: "20h" },
+    { id: 2, sender: "Casey",  text: "Glad we finally moved off the old tool 🎉", time: "18h" },
+    { id: 3, sender: "You",    text: "More updates coming — stay tuned.", time: "16h" },
   ],
   random: [
-    { id: 0, sender: "Meet",     text: "Anyone tried Ideavo? The one-click publish is genuinely insane 🚀", time: "2d" },
-    { id: 1, sender: "Siddhant", text: "Yeah I built a full app in like 10 mins yesterday lol", time: "2d" },
-    { id: 2, sender: "You",     text: "We should use it for the internal tools we keep putting off 👀", time: "1d" },
+    { id: 0, sender: "Casey",  text: "Anyone else's coffee maker broken today or just mine 😭", time: "3h" },
+    { id: 1, sender: "Jordan", text: "Solidarity. I've been on tea all morning.", time: "2h" },
+    { id: 2, sender: "You",    text: "Cold brew from the corner place — never looking back.", time: "1h" },
   ],
 };
 
-// DMs — always a conversation between Abhi (me) and one other person
 const DM_MESSAGES: Record<string, ChatMsg[]> = {
-  siddhant: [
-    { id: 0, sender: "Siddhant", text: "Hey, sent over the design review notes — lmk if anything's unclear.", time: "45m" },
-    { id: 1, sender: "You",     text: "Looks good! The empty states section is super helpful.", time: "40m" },
-    { id: 2, sender: "Siddhant", text: "Cool. I'll start on the onboarding illustrations today.", time: "38m" },
-    { id: 3, sender: "You",     text: "Let's sync Wednesday before you hand off?", time: "35m" },
-    { id: 4, sender: "Siddhant", text: "Wednesday works. I'll send a cal invite.", time: "30m" },
+  jordan: [
+    { id: 0, sender: "Jordan", text: "Hey! Sent over the design handoff — lmk if anything needs clarification.", time: "3h" },
+    { id: 1, sender: "You",    text: "Looks great! The new card system is exactly what we needed.", time: "2h" },
+    { id: 2, sender: "Jordan", text: "Glad it landed well. I'll be around for questions during implementation.", time: "1h" },
+    { id: 3, sender: "You",    text: "Can we do a quick walkthrough Thursday?", time: "45m" },
+    { id: 4, sender: "Jordan", text: "Thursday works — I'll send a calendar invite.", time: "30m" },
   ],
-  meet: [
-    { id: 0, sender: "Meet",     text: "PR #48 is approved and ready to merge whenever you are.", time: "3h" },
-    { id: 1, sender: "You",     text: "Nice! I'll check the z-index comment first then merge.", time: "2h" },
-    { id: 2, sender: "Meet",     text: "Yeah that one's minor — just a Safari clip, easy fix.", time: "2h" },
-    { id: 3, sender: "You",     text: "Fixed. Merging now 🎉", time: "1h" },
-    { id: 4, sender: "Meet",     text: "Let's gooo 🚀", time: "55m" },
+  casey: [
+    { id: 0, sender: "Casey",  text: "PR #61 is ready. Both reviewers approved — just waiting on you.", time: "2h" },
+    { id: 1, sender: "You",    text: "On it. Checking the auth edge case you flagged first.", time: "1h" },
+    { id: 2, sender: "Casey",  text: "It's minor — just a null check missing on the callback.", time: "55m" },
+    { id: 3, sender: "You",    text: "Fixed. Merging now 🎉", time: "30m" },
+    { id: 4, sender: "Casey",  text: "Deployed to staging — everything looks clean.", time: "15m" },
   ],
-  abhi: [
-    { id: 0, sender: "Abhi", text: "Hey! Can you review the copy for the pricing page?", time: "3h" },
-    { id: 1, sender: "You",  text: "Sure, sending feedback shortly.", time: "2h" },
-    { id: 2, sender: "Abhi", text: "No rush — whenever you get a chance 🙏", time: "2h" },
-    { id: 3, sender: "You",  text: "Left comments in the doc. Looks great overall!", time: "1h" },
-    { id: 4, sender: "Abhi", text: "Perfect, updating now. Thanks!", time: "45m" },
+  sarah: [
+    { id: 0, sender: "Sarah",  text: "Hey — just a heads up, I need your sign-off on the Q2 roadmap by Friday EOD.", time: "1h" },
+    { id: 1, sender: "You",    text: "On it. Reading through the doc now.", time: "50m" },
+    { id: 2, sender: "Sarah",  text: "Thanks! Let me know if you have questions on the agent builder timeline.", time: "40m" },
+    { id: 3, sender: "You",    text: "Will do. I'll send my sign-off by tonight.", time: "10m" },
   ],
 };
 
 const CHANNELS = [
-  { id: "general",     label: "general",     unread: 2 },
+  { id: "product",     label: "product",     unread: 2 },
   { id: "design",      label: "design",      unread: 0 },
   { id: "engineering", label: "engineering", unread: 1 },
-  { id: "launches",    label: "launches",    unread: 0 },
+  { id: "general",     label: "general",     unread: 0 },
   { id: "random",      label: "random",      unread: 0 },
 ];
 
 const DMS = [
-  { id: "siddhant", label: "Siddhant Chaudry", sender: "Siddhant", online: true  },
-  { id: "meet",     label: "Meet Kotadiya",    sender: "Meet",     online: true  },
-  { id: "abhi",     label: "Abhi Sharma",       sender: "Abhi",    online: true  },
+  { id: "jordan", label: "Jordan Rivera", sender: "Jordan", online: true  },
+  { id: "casey",  label: "Casey Morgan",  sender: "Casey",  online: true  },
+  { id: "sarah",  label: "Sarah Chen",    sender: "Sarah",  online: false },
 ];
 
-export default function InboxView() {
-  const [activeChannel, setActiveChannel] = useState("general");
+export default function InboxMock() {
+  const [activeChannel, setActiveChannel] = useState("product");
   const [extraMessages, setExtraMessages] = useState<Record<string, ChatMsg[]>>({});
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const isDM     = DMS.some(d => d.id === activeChannel);
+  const isDM         = DMS.some(d => d.id === activeChannel);
   const baseMessages = isDM
     ? (DM_MESSAGES[activeChannel] ?? [])
     : (CHANNEL_MESSAGES[activeChannel] ?? []);
@@ -118,10 +112,7 @@ export default function InboxView() {
   const activeDM     = DMS.find(d => d.id === activeChannel);
   const channelLabel = isDM ? activeDM!.label : `#${activeChannel}`;
 
-  // Scroll to bottom when messages change
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length, activeChannel]);
+
 
   const handleSend = () => {
     const text = inputValue.trim();
@@ -142,21 +133,18 @@ export default function InboxView() {
   return (
     <div className="flex h-full w-full overflow-hidden">
 
-      {/* ── Left pane ── */}
+      {/* Left pane */}
       <div
         className="w-[290px] shrink-0 flex flex-col overflow-hidden"
         style={{ background: BG, borderRight: `1px solid ${BORDER}` }}
       >
         <div className="px-5 py-3.5 shrink-0" style={{ borderBottom: `1px solid ${BORDER}` }}>
-          <span className="text-[15px] font-semibold" style={{ color: T_PRI }}>Ideavo</span>
+          <span className="text-[15px] font-semibold" style={{ color: T_PRI }}>Cube</span>
         </div>
 
         <div className="flex-1 overflow-y-auto py-2">
-          {/* Channels */}
           <div className="px-5 pt-2 pb-2">
-            <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: T_DIM }}>
-              Channels
-            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: T_DIM }}>Channels</span>
           </div>
           {CHANNELS.map(ch => (
             <button
@@ -178,11 +166,8 @@ export default function InboxView() {
             </button>
           ))}
 
-          {/* DMs */}
           <div className="px-5 pt-5 pb-2">
-            <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: T_DIM }}>
-              Direct Messages
-            </span>
+            <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: T_DIM }}>Direct Messages</span>
           </div>
           {DMS.map(dm => (
             <button
@@ -212,9 +197,8 @@ export default function InboxView() {
         </div>
       </div>
 
-      {/* ── Right pane: chat ── */}
+      {/* Right pane */}
       <div className="flex-1 flex flex-col overflow-hidden" style={{ background: BG2 }}>
-        {/* Header */}
         <div
           className="px-5 py-3 shrink-0 flex items-center gap-2"
           style={{ borderBottom: `1px solid ${BORDER}` }}
@@ -234,19 +218,16 @@ export default function InboxView() {
           )}
         </div>
 
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {messages.map((msg, i) => {
-            const isMe    = msg.sender === ME;
-            const prevMsg = messages[i - 1];
+            const isMe     = msg.sender === ME;
+            const prevMsg  = messages[i - 1];
             const prevSame = prevMsg && prevMsg.sender === msg.sender;
-
             return (
               <div
                 key={msg.id}
                 className={`flex items-start gap-3 ${isMe ? "flex-row-reverse" : ""} ${prevSame ? "mt-1" : "mt-4"}`}
               >
-                {/* Avatar spacer — always reserve width, only show img on first in group */}
                 <div className="w-8 h-8 shrink-0">
                   {!prevSame && (
                     <div className="w-8 h-8 rounded-full overflow-hidden bg-[#2a2a2e]">
@@ -254,8 +235,6 @@ export default function InboxView() {
                     </div>
                   )}
                 </div>
-
-                {/* Content */}
                 <div className={`max-w-[68%] flex flex-col ${isMe ? "items-end" : "items-start"}`}>
                   {!prevSame && (
                     <div className={`flex items-baseline gap-2 mb-1 ${isMe ? "flex-row-reverse" : ""}`}>
@@ -279,9 +258,9 @@ export default function InboxView() {
               </div>
             );
           })}
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
         <div className="px-5 pb-5 shrink-0">
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl"

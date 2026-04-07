@@ -1,51 +1,61 @@
 import { useEffect, useRef } from "react";
 
-const USER_AVATAR = "https://api.dicebear.com/9.x/notionists/svg?seed=User42&backgroundColor=7c3aed";
+const USER_AVATAR = "https://api.dicebear.com/9.x/notionists/svg?seed=AlexP&backgroundColor=7c3aed";
 
-const messages = [
+interface ToolCall {
+  label: string;
+  duration: string;
+}
+
+type MessageItem =
+  | { type: "user"; id: number; text: string }
+  | { type: "ai"; id: number; text: string; tools?: ToolCall[] };
+
+const THREAD: MessageItem[] = [
   {
+    type: "user",
     id: 1,
-    role: "user" as const,
-    text: "What's on my schedule today and are there any conflicts?",
-    time: "2:01 PM",
+    text: "What do I need to handle today?",
   },
   {
+    type: "ai",
     id: 2,
-    role: "ai" as const,
-    text: "You have 3 meetings today:\n• 9:00 AM — Team Standup (30 min)\n• 11:30 AM — Design Review with Liam\n• 2:00 PM — 1:1 with Sarah\n\nNo conflicts detected.",
-    time: "2:01 PM",
+    tools: [
+      { label: "Read inbox", duration: "0.8s" },
+      { label: "Read calendar", duration: "0.6s" },
+    ],
+    text: "2 emails need action — Sarah's Q2 roadmap sign-off is due Friday, Jordan sent design review notes.\n\n3 meetings today: Standup 9am, Design Review 11:30, 1:1 with Sarah 2pm. No conflicts.",
   },
   {
+    type: "user",
     id: 3,
-    role: "user" as const,
-    text: "Draft a reply to Sarah's email about Q2 roadmap sign-off.",
-    time: "2:03 PM",
+    text: "Draft a reply to Sarah's roadmap email.",
   },
   {
+    type: "ai",
     id: 4,
-    role: "ai" as const,
-    text: "Draft:\n\nHi Sarah, direction looks solid. I'll review the full doc before EOD and add my sign-off. Let's align on the agent builder timeline at our 2pm if needed.",
-    time: "2:03 PM",
+    tools: [
+      { label: "Read email · sarah_q2_roadmap", duration: "0.9s" },
+    ],
+    text: "Draft:\n\nHi Sarah, direction looks solid. I'll review the full doc and add my sign-off before EOD. Let's align on the agent builder timeline at our 2pm.",
   },
   {
+    type: "user",
     id: 5,
-    role: "user" as const,
-    text: "Any unread Slack messages I should know about?",
-    time: "2:05 PM",
+    text: "Block 30 min tomorrow for roadmap review.",
   },
   {
+    type: "ai",
     id: 6,
-    role: "ai" as const,
-    text: "3 threads worth flagging:\n• Meet flagged a z-index bug in #engineering\n• Siddhant posted updated Figma designs in #design\n• Liam asked about the handoff timeline in DMs",
-    time: "2:05 PM",
+    tools: [
+      { label: "Check calendar · tomorrow", duration: "0.5s" },
+      { label: "Create event · Q2 Roadmap Review", duration: "0.4s" },
+    ],
+    text: "Done — blocked 9:00–9:30 AM tomorrow. Morning is otherwise clear.",
   },
 ];
 
-const suggestions = [
-  "Summarise emails",
-  "What did I miss?",
-  "Schedule focus time",
-];
+const SUGGESTIONS = ["Summarise emails", "What did I miss?", "Schedule focus time"];
 
 function AICubeIcon() {
   return (
@@ -63,6 +73,18 @@ function UserAvatar() {
   );
 }
 
+function ToolRow({ tool }: { tool: ToolCall }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#4f4f58", flexShrink: 0 }}>
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <span className="text-[10.5px] font-mono" style={{ color: "#505058" }}>{tool.label}</span>
+      <span className="text-[10.5px]" style={{ color: "#3a3a42" }}>{tool.duration}</span>
+    </div>
+  );
+}
+
 export default function MobileChatView() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -75,13 +97,13 @@ export default function MobileChatView() {
   return (
     <div className="flex flex-col h-full min-w-0" style={{ background: "#121314" }}>
       {/* Header */}
-      <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/[0.07] shrink-0">
+      <div className="flex items-center gap-2.5 px-4 py-3 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         <AICubeIcon />
         <div>
-          <span className="text-[13px] font-semibold text-[#eaeaeb]">Cube AI</span>
+          <span className="text-[13px] font-semibold" style={{ color: "#eaeaeb" }}>Cube AI</span>
           <div className="flex items-center gap-1.5 mt-0.5">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="text-[10px] text-[#606066]">Connected to email, calendar, projects</span>
+            <span className="text-[10px]" style={{ color: "#606066" }}>Connected to email, calendar, projects</span>
           </div>
         </div>
       </div>
@@ -90,41 +112,68 @@ export default function MobileChatView() {
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2.5"
+        style={{ scrollbarWidth: "none" }}
       >
-        {messages.map(msg => (
-          <div
-            key={msg.id}
-            className={`flex gap-2 items-end ${msg.role === "user" ? "flex-row-reverse" : ""}`}
-          >
-            {msg.role === "ai" ? <AICubeIcon /> : <UserAvatar />}
-            <div
-              className={`px-3 py-2 rounded-2xl text-[12.5px] leading-relaxed whitespace-pre-line max-w-[80%] ${
-                msg.role === "user"
-                  ? "bg-indigo-600 text-white rounded-br-sm"
-                  : "bg-[#1e1f21] border border-white/[0.07] text-[#c8c8cc] rounded-bl-sm"
-              }`}
-            >
-              {msg.text}
+        {THREAD.map((item) => {
+          if (item.type === "user") {
+            return (
+              <div key={item.id} className="flex items-end gap-2 flex-row-reverse">
+                <UserAvatar />
+                <div
+                  className="px-3 py-2 rounded-2xl rounded-br-sm text-[12.5px] leading-relaxed max-w-[80%]"
+                  style={{ background: "#4f46e5", color: "#fff" }}
+                >
+                  {item.text}
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div key={item.id} className="flex items-end gap-2">
+              <AICubeIcon />
+              <div
+                className="px-3 py-2.5 rounded-2xl rounded-bl-sm text-[12.5px] leading-relaxed whitespace-pre-line max-w-[80%]"
+                style={{
+                  background: "#1e1f21",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  color: "#c8c8cc",
+                }}
+              >
+                {/* Tool calls inside bubble */}
+                {item.tools && item.tools.length > 0 && (
+                  <div
+                    className="flex flex-col gap-1 mb-2 pb-2"
+                    style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+                  >
+                    {item.tools.map((tool, i) => (
+                      <ToolRow key={i} tool={tool} />
+                    ))}
+                  </div>
+                )}
+                {item.text}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Suggestions + input */}
       <div className="px-4 pb-4 flex flex-col gap-2 shrink-0">
-        <div className="flex items-center gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {suggestions.map(s => (
+        <div className="flex items-center gap-1.5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+          {SUGGESTIONS.map(s => (
             <button
               key={s}
-              className="shrink-0 text-[11px] text-[#606066] px-2.5 py-1 rounded-full border border-white/[0.07] hover:border-white/[0.14] hover:text-[#a0a0a6] transition-colors"
+              className="shrink-0 text-[11px] px-2.5 py-1 rounded-full border border-white/[0.07] hover:border-white/[0.14] hover:text-[#a0a0a6] transition-colors"
+              style={{ color: "#606066" }}
             >
               {s}
             </button>
           ))}
         </div>
 
-        <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03]">
-          <span className="flex-1 text-[12.5px] text-[#505056]">Message Cube AI...</span>
+        <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl" style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)" }}>
+          <span className="flex-1 text-[12.5px]" style={{ color: "#505056" }}>Message Cube AI...</span>
           <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center cursor-pointer hover:bg-indigo-500 transition-colors">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
               <path d="M12 19V5M5 12l7-7 7 7"/>

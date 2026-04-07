@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { DemoView } from "./types";
 import Sidebar from "./Sidebar";
-import InboxView from "./InboxView";
-import EmailView from "./EmailView";
-import ChatView from "./ChatView";
+import InboxView from "./InboxMock";
+import EmailView from "./EmailMock";
+import ChatView from "./ChatMock";
 import KanbanView from "./KanbanView";
 import DocsView from "./DocsView";
 import CalendarView from "./CalendarView";
@@ -13,18 +13,8 @@ export default function MainDemo() {
   const [activeFileId, setActiveFileId] = useState<string>("f1");
 
   return (
-    <div
-      className="w-full rounded-t-2xl overflow-hidden font-geist"
-      style={{
-        height: "780px",
-        background: "#111213",
-        boxShadow: "0 0 0 1px rgba(255,255,255,0.06), 0 32px 80px rgba(0,0,0,0.8)",
-      }}
-    >
-      <div
-        className="h-full flex rounded-t-2xl overflow-hidden"
-        style={{ border: "1px solid rgba(255,255,255,0.06)" }}
-      >
+    <div className="w-full h-180 mt-5 rounded-lg overflow-hidden font-geist bg-[#111213] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_32px_80px_rgba(0,0,0,0.8)]">
+      <div className="h-full flex rounded-lg overflow-hidden border border-white/6">
         <Sidebar
           activeView={activeView}
           onViewChange={setActiveView}
@@ -33,10 +23,10 @@ export default function MainDemo() {
         />
 
         {/* Main content */}
-        <div className="flex flex-1 min-w-0 overflow-hidden" style={{ background: "#121314" }}>
-          {activeView === "inbox"  && <InboxView />}
-          {activeView === "email"  && <EmailView />}
-          {activeView === "chat"   && <ChatView />}
+        <div className="flex flex-1 min-w-0 overflow-hidden bg-[#121314]">
+          {activeView === "inbox"    && <InboxView />}
+          {activeView === "email"    && <EmailView />}
+          {activeView === "chat"     && <ChatView />}
           {activeView === "kanban"   && <KanbanView />}
           {activeView === "docs"     && <DocsView activeFileId={activeFileId} />}
           {activeView === "calendar" && <CalendarView />}

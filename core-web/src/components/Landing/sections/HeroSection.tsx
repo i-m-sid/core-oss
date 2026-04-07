@@ -28,7 +28,7 @@ function ScaledDesktopDemo() {
   }, []);
 
   return (
-    <div ref={wrapRef} className="w-full overflow-hidden" style={{ height: `${780 * scale}px` }}>
+    <div ref={wrapRef} className="w-full overflow-hidden h-250">
       <div style={{ transform: `scale(${scale})`, transformOrigin: "top left", width: `${DEMO_W}px` }}>
         <MainDemo />
       </div>
@@ -64,7 +64,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         >
           <source src="/landingPage/hero-720.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-black" />
       </div>
 
       {/* Content */}
@@ -77,7 +77,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         </h1>
 
         {/* Subheading */}
-        <p className="relative z-10 mt-4 mb-8 md:mt-6 md:mb-10 max-w-[260px] sm:max-w-sm md:max-w-2xl text-center text-[15px] md:text-lg font-thin tracking-[-0.3px] text-white/60">
+        <p className="relative z-10 mt-4 mb-8 md:mt-6 md:mb-10 max-w-65 sm:max-w-sm md:max-w-2xl text-center text-[15px] md:text-lg font-thin tracking-[-0.3px] text-white/60">
           {HERO.subheading}
         </p>
 
@@ -85,19 +85,18 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         <div className="relative z-10 flex items-center gap-3 mb-10 md:mb-16">
           <button
             onClick={onGetStarted}
-            className="cursor-pointer inline-flex items-center gap-2 px-5 py-3 md:px-7 md:py-3.5 bg-white text-black text-[13px] md:text-[14px] font-medium rounded-lg hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="cursor-pointer inline-flex items-center gap-2 px-5 py-3 md:px-7 md:py-3.5 text-demo-md md:text-demo-lg font-medium rounded-lg transition-all text-white border border-white/10 bg-white/5 backdrop-blur-sm hover:border-white/20 hover:bg-white/10 active:scale-[0.98]"
+          >
+            Log in
+          </button>
+          <button
+            onClick={onGetStarted}
+            className="cursor-pointer inline-flex items-center gap-2 px-5 py-3 md:px-7 md:py-3.5 bg-white text-black text-demo-md md:text-demo-lg font-medium rounded-lg hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
             {HERO.cta}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </button>
-
-          <button
-            onClick={onGetStarted}
-            className="cursor-pointer inline-flex items-center gap-2 px-5 py-3 md:px-7 md:py-3.5 text-[13px] md:text-[14px] font-medium rounded-lg transition-all text-white border border-white/10 bg-white/5 backdrop-blur-sm hover:border-white/20 hover:bg-white/10 active:scale-[0.98]"
-          >
-            Log in
           </button>
         </div>
 
