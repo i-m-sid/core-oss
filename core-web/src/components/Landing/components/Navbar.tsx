@@ -4,9 +4,10 @@ import { NAV } from "../constants/landingData";
 
 interface NavbarProps {
   onGetStarted: () => void;
+  showLogo?: boolean;
 }
 
-export default function Navbar({ onGetStarted }: NavbarProps) {
+export default function Navbar({ onGetStarted, showLogo = true }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
@@ -27,8 +28,8 @@ export default function Navbar({ onGetStarted }: NavbarProps) {
   return (
     <motion.header
       className="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 items-center justify-between px-4 py-4 w-[calc(100%-3rem)] max-w-[2000px] md:w-[calc(100%-6rem)] xl:w-[calc(100%-12rem)]"
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: showLogo ? 1 : 0, pointerEvents: showLogo ? "auto" : "none" }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       {/* Left — logo + brand + nav links */}
@@ -38,7 +39,15 @@ export default function Navbar({ onGetStarted }: NavbarProps) {
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="flex cursor-pointer items-center gap-3">
-          <img src="/cube-logo-white.svg" alt={NAV.brand} className="w-6 h-6 md:w-7 md:h-7" />
+          {/* showLogo=false → layoutId div absent → Framer Motion flies from overlay */}
+          {showLogo && (
+            <motion.div layoutId="brand-logo" className="w-6 h-6 md:w-7 md:h-7">
+              <svg viewBox="0 0 498 510" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
+                <polygon points="280.511,18.6 470.689,128.4 280.511,238.2" fill="#FFFFFF" />
+                <polygon points="27.311,149.4 280.511,238.2 280.511,491.4 27.311,402.6" fill="#FFFFFF" />
+              </svg>
+            </motion.div>
+          )}
           <span className="text-[16px] font-semibold tracking-tight text-white leading-none">
             {NAV.brand}
           </span>

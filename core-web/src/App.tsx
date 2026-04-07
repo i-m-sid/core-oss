@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, useCallback } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -24,7 +24,6 @@ import { useResumeRevalidation } from "./hooks/useResumeRevalidation";
 import { Sentry, setSentryUser } from "./lib/sentry";
 import { identifyUser, resetUser, trackPageView } from "./lib/posthog";
 import { FeatureErrorBoundary } from "./components/ui/FeatureErrorBoundary";
-import { LoadingOverlayPresence } from "./components/Landing/components/LoadingOverlay";
 
 const OAuthCallback = lazy(() => import("./components/OAuthCallback"));
 const InviteAcceptPage = lazy(() => import("./pages/InviteAcceptPage"));
@@ -218,9 +217,6 @@ function AppContent() {
   const { activeProductType } = useProductStore();
   const isInviteRoute = location.pathname.startsWith("/invite/");
   const isShareLinkRoute = location.pathname.startsWith("/s/");
-  const isLandingRoute = location.pathname === "/";
-  const [landingOverlayDone, setLandingOverlayDone] = useState(false);
-  const handleLandingOverlayComplete = useCallback(() => setLandingOverlayDone(true), []);
   const initBootstrappedUserRef = useRef<string | null>(null);
   const postSignupResolvedUserRef = useRef<string | null>(null);
   const inviteRedirectInProgressRef = useRef(false);
@@ -449,24 +445,12 @@ function AppContent() {
       }
       return <Navigate to="/chat" replace />;
     }
-    // If still loading and no persisted auth state, show loading
-    if (authLoading) {
-      return (
-        <>
-          <div className="h-screen w-screen" style={{ background: "#0e0f10" }} />
-          <LoadingOverlayPresence show={!landingOverlayDone} onComplete={handleLandingOverlayComplete} />
-        </>
-      );
-    }
-    // Not authenticated, show landing page — overlay is rendered here so it
-    // covers both the authLoading wait and the lazy-chunk load seamlessly.
+    // Not authenticated (or still loading) — render landing page.
+    // LandingPage owns the loading overlay and logo fly animation internally.
     return (
-      <>
-        <LoadingOverlayPresence show={!landingOverlayDone} onComplete={handleLandingOverlayComplete} />
-        <Suspense fallback={<div className="h-screen w-screen" style={{ background: "#0e0f10" }} />}>
-          <LandingPage />
-        </Suspense>
-      </>
+      <Suspense fallback={<div className="h-screen w-screen" style={{ background: "#0e0f10" }} />}>
+        <LandingPage />
+      </Suspense>
     );
   }
 

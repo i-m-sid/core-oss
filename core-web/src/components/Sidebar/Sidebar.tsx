@@ -1042,7 +1042,7 @@ export default function Sidebar() {
 
         {/* Navigation Icons - Workspace apps */}
         {activeProductType === 'workspace' && (
-        <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 -mx-1 -mt-1">
+        <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 -mx-1 -mt-1 scrollbar-sidebar">
           {/* Workspace-specific mini apps - at top */}
           {displayMiniApps.filter((app) => app.type !== 'email' && app.type !== 'calendar').map((app) => {
             // Check both the direct path and any workspace-prefixed variant
@@ -1087,7 +1087,7 @@ export default function Sidebar() {
 
         {/* AI Builder sidebar content */}
         {activeProductType === 'ai_builder' && (
-          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1">
+          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 scrollbar-sidebar">
             <button
               onClick={() => navigate('/builder')}
               title="AI Apps"
@@ -1100,7 +1100,7 @@ export default function Sidebar() {
 
         {/* Website Builder sidebar content */}
         {activeProductType === 'website_builder' && (
-          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1">
+          <div className="flex-1 flex flex-col items-center gap-2 overflow-y-auto px-1 pt-1 scrollbar-sidebar">
             <button
               onClick={() => navigate('/sites')}
               title="My Sites"

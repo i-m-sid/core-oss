@@ -198,6 +198,75 @@ p {
   --width-signin-modal: 24rem;
 }
 
+/* Scrollbar — thin and subtle globally */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.32);
+}
+
+/* Landing page — scroll happens on html/body, style it dark to match #0e0f10 */
+html.landing {
+  scrollbar-color: rgba(255, 255, 255, 0.15) #0e0f10;
+}
+
+html.landing::-webkit-scrollbar {
+  width: 4px;
+}
+
+html.landing::-webkit-scrollbar-track {
+  background: #0e0f10;
+}
+
+html.landing::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+html.landing::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Sidebar nav scroll area — track matches sidebar bg exactly */
+.scrollbar-sidebar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) #E3E3E5;
+}
+
+.scrollbar-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-sidebar::-webkit-scrollbar-track {
+  background: #E3E3E5;
+  border-radius: 999px;
+}
+
+.scrollbar-sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+}
+
+.scrollbar-sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
 body {
   margin: 0;
   padding: 0;
