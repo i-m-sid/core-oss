@@ -1,11 +1,12 @@
 import { motion } from "motion/react";
 import { FOOTER } from "../constants/landingData";
 
-const LINKS = {
-  Product: [
-    { label: "Pricing",   href: "/pricing"   },
-    { label: "Changelog", href: "/changelog" },
-  ],
+const PRODUCT_LINKS = [
+  { label: "Features", id: "features" },
+  { label: "Pricing",  id: "pricing"  },
+];
+
+const STATIC_LINKS = {
   Legal: [
     { label: "Privacy", href: "/privacy" },
     { label: "Terms",   href: "/terms"   },
@@ -90,8 +91,25 @@ export default function Footer() {
           {/* Spacer */}
           <div className="hidden lg:col-span-1 lg:block" />
 
-          {/* Link columns */}
-          {Object.entries(LINKS).map(([group, items]) => (
+          {/* Product links (scroll) */}
+          <div className="col-span-1 lg:col-span-2">
+            <h4 className="mb-5 text-demo-sm font-semibold tracking-widest uppercase text-white/60">Product</h4>
+            <ul className="space-y-4">
+              {PRODUCT_LINKS.map(({ label, id }) => (
+                <li key={id}>
+                  <a
+                    href={`/#${id}`}
+                    className="text-demo-lg font-light text-neutral-500 transition-colors hover:text-white"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Static link columns */}
+          {Object.entries(STATIC_LINKS).map(([group, items]) => (
             <div key={group} className="col-span-1 lg:col-span-2">
               <h4 className="mb-5 text-demo-sm font-semibold tracking-widest uppercase text-white/60">{group}</h4>
               <ul className="space-y-4">

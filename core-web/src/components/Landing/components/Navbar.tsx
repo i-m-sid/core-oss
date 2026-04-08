@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import { useNavigate } from "react-router-dom";
 import { NAV } from "../constants/landingData";
 
 interface NavbarProps {
@@ -10,6 +11,7 @@ interface NavbarProps {
 export default function Navbar({ onGetStarted, showLogo = true }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
+  const navigate = useNavigate();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const next = latest > 60;
@@ -38,7 +40,7 @@ export default function Navbar({ onGetStarted, showLogo = true }: NavbarProps) {
         animate={shellStyles}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <div className="flex cursor-pointer items-center gap-3">
+        <div className="flex cursor-pointer items-center gap-3" onClick={() => navigate("/")}>
           {/* showLogo=false → layoutId div absent → Framer Motion flies from overlay */}
           {showLogo && (
             <motion.div layoutId="brand-logo" className="w-6 h-6 md:w-7 md:h-7">
@@ -57,11 +59,7 @@ export default function Navbar({ onGetStarted, showLogo = true }: NavbarProps) {
           {[{ label: "Features", id: "features" }, { label: "Pricing", id: "pricing" }].map(({ label, id }) => (
             <a
               key={id}
-              href={`#${id}`}
-              onClick={e => {
-                e.preventDefault();
-                document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }}
+              href={`/#${id}`}
               className="text-[14px] font-normal text-neutral-300 transition-colors hover:text-white"
             >
               {label}
