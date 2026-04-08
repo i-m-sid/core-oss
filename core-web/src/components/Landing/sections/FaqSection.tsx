@@ -25,8 +25,8 @@ const FAQS = [
     a: "Yes. All data is encrypted in transit and at rest. We do not train AI models on your data, and your workspace contents are never shared across customers. We follow industry-standard security practices and can provide a DPA on request.",
   },
   {
-    q: "Can I try Cube for free?",
-    a: "Absolutely. You can get started for free — no credit card required. The free plan gives you full access to core features so you can evaluate Cube properly before committing.",
+    q: "Is Cube free?",
+    a: "Yes — Cube is completely free, forever. No credit card, no trial, no catch. Just sign up and use it.",
   },
 ];
 
