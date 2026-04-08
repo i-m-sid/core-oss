@@ -6,11 +6,11 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const FAQS = [
   {
     q: "What is Cube?",
-    a: "Cube is an all-in-one workspace that brings together email, chat, calendar, and AI into a single connected product. Instead of switching between apps, everything your team needs lives in one place — with AI woven throughout to help you move faster.",
+    a: "Cube is an all-in-one workspace that brings together messages, files, calendar, email, projects, and AI into a single connected product. Instead of switching between separate apps, your team works in one place with AI built in from the start.",
   },
   {
     q: "How does the AI integration work?",
-    a: "Cube's AI understands the full context of your workspace — your emails, conversations, calendar events, and documents. You can ask it to draft replies, summarise threads, schedule meetings, find files, or surface anything from across your work. It's always available in a side panel, not hidden behind a separate app.",
+    a: "Cube's AI understands the full context of your workspace — your messages, files, emails, calendar events, and projects. You can ask it to draft replies, summarise threads, schedule meetings, find files, or pull up anything from across your work. It's built directly into Cube, not bolted on as a separate tool.",
   },
   {
     q: "Is Cube a replacement for my current email client?",
@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: "Who is Cube built for?",
-    a: "Cube is designed for teams that are tired of juggling too many communication tools. It works well for startups, growing companies, and any team where email, internal chat, and calendar are all central to how work gets done.",
+    a: "Cube is designed for teams that are tired of juggling too many tools. It works especially well for startups and fast-moving teams that rely on messages, files, email, calendar, and projects every day and want AI that actually has the full context.",
   },
   {
     q: "Is my data private and secure?",

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 const SHORTCUTS = [
   {
     action: "Go to Chat",
-    keys: ["⌘", "⇧", "C"],
+    keys: ["G", "M"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -13,7 +13,7 @@ const SHORTCUTS = [
   },
   {
     action: "Go to Inbox",
-    keys: ["⌘", "⇧", "I"],
+    keys: ["G", "I"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -23,7 +23,7 @@ const SHORTCUTS = [
   },
   {
     action: "Go to Projects",
-    keys: ["⌘", "⇧", "P"],
+    keys: ["G", "P"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -42,7 +42,7 @@ const SHORTCUTS = [
   },
   {
     action: "Go to Calendar",
-    keys: ["⌘", "⇧", "L"],
+    keys: ["G", "C"],
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
@@ -79,7 +79,7 @@ export default function CalendarCard() {
         <div>
           <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Lightning fast navigation</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-[#606068]">
-            Jump between chat, inbox, projects, and calendar instantly. No mouse needed — your whole workspace at your fingertips.
+            Jump between messages, inbox, projects, and calendar instantly. No more window switching.
           </p>
         </div>
       </div>
@@ -128,10 +128,14 @@ export default function CalendarCard() {
 
               {/* Keys — single pill, monospace, dim */}
               <span
-                className="font-mono text-[11px] tracking-tight transition-all duration-300 shrink-0"
+                className="flex shrink-0 items-center gap-1 text-[11px] tracking-tight transition-all duration-300"
                 style={{ color: isActive ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.1)" }}
               >
-                {s.keys.join(" ")}
+                {s.keys.map((key) => (
+                  <span key={`${s.action}-${key}`} className="inline-flex min-w-[12px] items-center justify-center text-center">
+                    {key}
+                  </span>
+                ))}
               </span>
             </div>
           );

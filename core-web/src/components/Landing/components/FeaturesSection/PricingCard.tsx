@@ -48,7 +48,7 @@ export default function PricingCard({ onGetStarted }: PricingCardProps) {
         viewport={{ once: true }}
         transition={{ delay: 0.3, duration: 0.4 }}
       >
-        Free while in beta
+        Free, forever
       </motion.p>
 
       {/* Perks */}

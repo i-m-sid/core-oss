@@ -175,9 +175,9 @@ export default function IntegrationsCard() {
           <Layers size={15} color="white" strokeWidth={2} />
         </div>
         <div>
-          <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Everything flows into one place</h3>
+          <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">All your tools, finally together</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-[#606068]">
-            Connect your tools once. Mail, calendar, messages, projects, and files — all pulled into Cube so nothing slips through.
+            Messages, files, calendar, email, and projects live inside Cube, so your team can work in one connected app instead of jumping between separate tools.
           </p>
         </div>
       </div>

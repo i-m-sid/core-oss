@@ -155,7 +155,7 @@ type ActionCardProps = {
 function ActionCard({ action, isActive, isDone }: ActionCardProps) {
   return (
     <div
-      className="rounded-xl border p-4 transition-all duration-500"
+      className="flex h-[132px] flex-col rounded-xl border p-4 transition-all duration-500"
       style={{
         background: isActive ? "#18191c" : "#141517",
         borderColor: isActive ? BORDER_ACTIVE[action.color] : "rgba(255,255,255,0.05)",
@@ -250,9 +250,9 @@ export default function AIChatCard() {
           <img src="/cube-logo-white.svg" alt="Cube AI" className="w-4 h-4 object-contain opacity-80" />
         </div>
         <div>
-          <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Ask Cube AI anything</h3>
+          <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Ask Cube AI anything, anywhere</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-[#606068]">
-            Cube understands your Slack, inbox, calendar, emails, projects, and files. Type a prompt and it acts — no copy-pasting, no switching tabs.
+            Cube brings messaging, files, calendar, email, and projects into one app, so your AI assistant has complete context from the start.
           </p>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function AIChatCard() {
             return (
               <div
                 key={action.key}
-                className="rounded-xl border p-3.5 transition-all duration-500"
+                className="flex h-[116px] flex-col rounded-xl border p-3.5 transition-all duration-500"
                 style={{
                   background: isActive ? "#18191c" : "#141517",
                   borderColor: isActive ? BORDER_ACTIVE[action.color] : "rgba(255,255,255,0.05)",
@@ -296,7 +296,7 @@ export default function AIChatCard() {
                   {isDone && <Check size={7} strokeWidth={2.5} />}
                   {isDone ? action.doneLabel : "Waiting"}
                 </div>
-                <div className="mt-3 flex justify-between font-mono text-[10px]" style={{ color: "#404048" }}>
+                <div className="mt-auto flex justify-between font-mono text-[10px]" style={{ color: "#404048" }}>
                   <span>{action.footerLeft}</span>
                   <span style={{ color: isDone ? ICON_COLOR[action.color] : "#404048" }}>{action.footerRight}</span>
                 </div>
@@ -349,8 +349,8 @@ export default function AIChatCard() {
             { index: 0, cls: "top-8 left-12" },
             { index: 1, cls: "top-[-20px] left-1/2 -translate-x-1/2" },
             { index: 2, cls: "top-0 right-12" },
-            { index: 3, cls: "bottom-20 left-64" },
-            { index: 4, cls: "bottom-20 right-32" },
+            { index: 3, cls: "bottom-25 left-50" },
+            { index: 4, cls: "bottom-25 right-25" },
           ].map(({ index, cls }) => {
             const action   = AI_CHAT_ACTIONS[index];
             const isActive = action.key === step.activeCard && phase !== "typing";
