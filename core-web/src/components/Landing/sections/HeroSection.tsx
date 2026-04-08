@@ -1,49 +1,9 @@
-import { useRef, useEffect, useState } from "react";
 import { HERO } from "../constants/landingData";
 import { MainDemo } from "../components/DemoSection";
-import MobileDemo, { type MobileView } from "../components/DemoSection/MobileDemo";
-import MobileInboxView from "../components/DemoSection/MobileInboxView";
-import MobileEmailView from "../components/DemoSection/MobileEmailView";
-import MobileChatView from "../components/DemoSection/MobileChatView";
-import MobileCalendarView from "../components/DemoSection/MobileCalendarView";
+import MobileDemo from "../components/DemoSection/MobileDemo";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
-}
-
-// Scales the fixed-size MainDemo down to fill its container on desktop
-function ScaledDesktopDemo() {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const DEMO_W = 1280;
-
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const obs = new ResizeObserver(([entry]) => {
-      setScale(entry.contentRect.width / DEMO_W);
-    });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <div ref={wrapRef} className="w-full overflow-hidden h-220">
-      <div style={{ transform: `scale(${scale})`, transformOrigin: "top left", width: `${DEMO_W}px` }}>
-        <MainDemo />
-      </div>
-    </div>
-  );
-}
-
-// Renders the correct view for the active mobile tab
-function renderMobileView(view: MobileView) {
-  switch (view) {
-    case "inbox":    return <MobileInboxView />;
-    case "email":    return <MobileEmailView />;
-    case "chat":     return <MobileChatView />;
-    case "calendar": return <MobileCalendarView />;
-  }
 }
 
 export default function HeroSection({ onGetStarted }: HeroSectionProps) {
@@ -97,12 +57,12 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         <div className="w-full max-w-375">
           {/* Mobile: purpose-built layout */}
           <div className="md:hidden">
-            <MobileDemo renderView={renderMobileView} />
+            <MobileDemo />
           </div>
 
-          {/* Desktop: scaled-down full demo */}
-          <div className="hidden md:block">
-            <ScaledDesktopDemo />
+          {/* Desktop: clip to container width */}
+          <div className="hidden md:block overflow-hidden rounded-lg">
+            <MainDemo />
           </div>
         </div>
 

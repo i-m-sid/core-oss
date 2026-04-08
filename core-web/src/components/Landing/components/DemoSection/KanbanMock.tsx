@@ -1,65 +1,23 @@
 import { useState } from "react";
+import {
+  KANBAN_INITIAL_COLUMNS,
+  KANBAN_COLORS,
+  type KanbanColumnId,
+  type KanbanColumn,
+} from "./constantData";
 
-type ColumnId = "in-progress" | "todo" | "done";
+const { T_PRI, T_SEC, T_DIM, COL_DIVIDER } = KANBAN_COLORS;
 
-interface Card {
-  id: string;
-  title: string;
-  assignee?: string;
-  date?: string;
-  commentCount?: number;
-}
+export default function KanbanMock() {
+  const [cols, setCols] = useState<KanbanColumn[]>(KANBAN_INITIAL_COLUMNS);
+  const [dragging, setDragging] = useState<{ cardId: string; fromCol: KanbanColumnId } | null>(null);
+  const [dragOver, setDragOver] = useState<KanbanColumnId | null>(null);
 
-interface Column {
-  id: ColumnId;
-  label: string;
-  cards: Card[];
-}
-
-const INITIAL_COLUMNS: Column[] = [
-  {
-    id: "in-progress",
-    label: "In Progress",
-    cards: [
-      { id: "CUB-204", title: "Redesign onboarding flow",    assignee: "AB", date: "Apr 8",  commentCount: 3 },
-      { id: "CUB-198", title: "Refactor auth token refresh", assignee: "AB", date: "Apr 6" },
-    ],
-  },
-  {
-    id: "todo",
-    label: "To Do",
-    cards: [
-      { id: "CUB-212", title: "Add keyboard shortcuts to editor", date: "Apr 10", commentCount: 1 },
-      { id: "CUB-209", title: "Integrate Slack notifications",    assignee: "AB", date: "Apr 11" },
-      { id: "CUB-215", title: "Improve mobile responsiveness",    date: "Apr 12" },
-    ],
-  },
-  {
-    id: "done",
-    label: "Done",
-    cards: [
-      { id: "CUB-191", title: "Fix email sync on slow networks", date: "Apr 3" },
-      { id: "CUB-188", title: "Landing page hero redesign",      assignee: "AB", date: "Apr 2", commentCount: 5 },
-    ],
-  },
-];
-
-
-const T_PRI = "#dddde0";
-const T_SEC = "#909096";
-const T_DIM = "#484850";
-const COL_DIVIDER = "rgba(255,255,255,0.05)";
-
-export default function KanbanView() {
-  const [cols, setCols] = useState<Column[]>(INITIAL_COLUMNS);
-  const [dragging, setDragging] = useState<{ cardId: string; fromCol: ColumnId } | null>(null);
-  const [dragOver, setDragOver]   = useState<ColumnId | null>(null);
-
-  function handleDragStart(cardId: string, fromCol: ColumnId) {
+  function handleDragStart(cardId: string, fromCol: KanbanColumnId) {
     setDragging({ cardId, fromCol });
   }
 
-  function handleDrop(toCol: ColumnId) {
+  function handleDrop(toCol: KanbanColumnId) {
     if (!dragging || dragging.fromCol === toCol) {
       setDragging(null);
       setDragOver(null);
@@ -89,11 +47,11 @@ export default function KanbanView() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T_DIM} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
           </svg>
-          <span className="text-[14px] font-semibold" style={{ color: T_PRI }}>Cube Web</span>
-          <span className="text-[12px]" style={{ color: T_DIM }}>/ Board</span>
+          <span className="text-demo-lg font-semibold" style={{ color: T_PRI }}>Cube Web</span>
+          <span className="text-demo-sm" style={{ color: T_DIM }}>/ Board</span>
         </div>
         <button
-          className="flex items-center gap-1.5 text-[12px] cursor-pointer transition-colors"
+          className="flex items-center gap-1.5 text-demo-sm cursor-pointer transition-colors"
           style={{ color: T_DIM }}
           onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = T_SEC}
           onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = T_DIM}
@@ -105,7 +63,7 @@ export default function KanbanView() {
         </button>
       </div>
 
-      {/* Board — columns separated by a faint divider, no bg */}
+      {/* Board */}
       <div className="flex-1 flex overflow-hidden">
         {cols.map((col, colIdx) => (
           <div
@@ -126,7 +84,7 @@ export default function KanbanView() {
                 {col.label}
               </span>
               <span
-                className="text-[11px] tabular-nums px-1.5 py-0.5 rounded"
+                className="text-demo-xs tabular-nums px-1.5 py-0.5 rounded"
                 style={{ color: T_DIM, background: "rgba(255,255,255,0.05)" }}
               >
                 {col.cards.length}
@@ -158,26 +116,26 @@ export default function KanbanView() {
                 >
                   {/* Title */}
                   <div className="mb-3">
-                    <span className="text-[13px] leading-snug" style={{ color: T_PRI }}>{card.title}</span>
+                    <span className="text-demo-md leading-snug" style={{ color: T_PRI }}>{card.title}</span>
                   </div>
 
                   {/* Meta */}
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px]" style={{ color: T_DIM }}>{card.id}</span>
+                    <span className="text-demo-xs" style={{ color: T_DIM }}>{card.id}</span>
                     <div className="flex items-center gap-2 ml-auto shrink-0">
                       {card.commentCount && (
                         <div className="flex items-center gap-1" style={{ color: T_DIM }}>
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                           </svg>
-                          <span className="text-[11px]">{card.commentCount}</span>
+                          <span className="text-demo-xs">{card.commentCount}</span>
                         </div>
                       )}
                       {card.date && (
-                        <span className="text-[11px]" style={{ color: T_DIM }}>{card.date}</span>
+                        <span className="text-demo-xs" style={{ color: T_DIM }}>{card.date}</span>
                       )}
                       {card.assignee && (
-                        <div className="w-[18px] h-[18px] rounded-full bg-violet-600 flex items-center justify-center shrink-0">
+                        <div className="w-4.5 h-4.5 rounded-full bg-violet-600 flex items-center justify-center shrink-0">
                           <span className="text-white font-bold" style={{ fontSize: "7px" }}>{card.assignee}</span>
                         </div>
                       )}
@@ -188,7 +146,7 @@ export default function KanbanView() {
 
               {col.cards.length === 0 && (
                 <div className="flex items-center justify-center py-6">
-                  <span className="text-[12px]" style={{ color: T_DIM }}>No cards</span>
+                  <span className="text-demo-sm" style={{ color: T_DIM }}>No cards</span>
                 </div>
               )}
             </div>

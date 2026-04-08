@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import MobileInboxMock from "./MobileInboxMock";
+import MobileEmailMock from "./MobileEmailView";
+import MobileChatView from "./MobileChatMock";
+import MobileCalendarMock from "./MobileCalendarMock";
 
 function useCurrentTime() {
   const fmt = () => {
@@ -110,15 +114,18 @@ function CalendarIcon({ active }: { active: boolean }) {
   );
 }
 
-// ── Props ─────────────────────────────────────────────────────────────────────
-
-interface MobileDemoProps {
-  renderView: (view: MobileView) => React.ReactNode;
+function renderView(view: MobileView): React.ReactNode {
+  switch (view) {
+    case "inbox":    return <MobileInboxMock />;
+    case "email":    return <MobileEmailMock />;
+    case "chat":     return <MobileChatView />;
+    case "calendar": return <MobileCalendarMock />;
+  }
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function MobileDemo({ renderView }: MobileDemoProps) {
+export default function MobileDemo() {
   const [activeView, setActiveView] = useState<MobileView>("inbox");
   const time = useCurrentTime();
 

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-
+import { INBOX_AVATARS as AVATARS, CHANNEL_MESSAGES, CHANNELS, type ChatMsg } from "./constantData";
 const BG     = "#111213";
 const BG2    = "#121314";
 const BORDER = "rgba(255,255,255,0.06)";
@@ -11,53 +11,6 @@ const HOVER  = "rgba(255,255,255,0.04)";
 
 const ME = "You";
 
-const AVATARS: Record<string, string> = {
-  Jordan: "https://api.dicebear.com/9.x/notionists/svg?seed=Siddhant&backgroundColor=0ea5e9",
-  Casey:  "https://api.dicebear.com/9.x/notionists/svg?seed=MeetK&backgroundColor=0f766e",
-  Alex:   "https://api.dicebear.com/9.x/notionists/svg?seed=AbhiS&backgroundColor=7c3aed",
-  You:    "https://api.dicebear.com/9.x/notionists/svg?seed=YouUser&backgroundColor=7c3aed",
-};
-
-interface ChatMsg {
-  id: number;
-  sender: string;
-  text: string;
-  time: string;
-}
-
-const CHANNEL_MESSAGES: Record<string, ChatMsg[]> = {
-  general: [
-    { id: 0, sender: "Jordan", text: "Pushed the new onboarding flow to staging — looks clean 🎉", time: "9m" },
-    { id: 1, sender: "Casey",  text: "Nice! Checked it on mobile too, feels smooth.", time: "8m" },
-    { id: 2, sender: "You",    text: "Great work. Let's keep this momentum for v1.2.", time: "6m" },
-    { id: 3, sender: "Jordan", text: "Anyone free for a quick review call before we push to prod?", time: "4m" },
-    { id: 4, sender: "Casey",  text: "I'm free after 4pm 👍", time: "3m" },
-    { id: 5, sender: "You",    text: "Works for me. Setting up a Huddle at 4.", time: "1m" },
-  ],
-  design: [
-    { id: 0, sender: "Jordan", text: "Updated the empty states — check Figma for the latest version.", time: "2h" },
-    { id: 1, sender: "You",    text: "Dashboard header spacing looks tight now, good call.", time: "1h" },
-    { id: 2, sender: "Jordan", text: "Onboarding illustrations are next on my list.", time: "45m" },
-    { id: 3, sender: "Casey",  text: "Lmk when they're ready, I'll review before handoff.", time: "30m" },
-    { id: 4, sender: "You",    text: "Let's target handoff by end of week.", time: "20m" },
-  ],
-  engineering: [
-    { id: 0, sender: "You",    text: "Build is stable, QA signed off this morning ✅", time: "5h" },
-    { id: 1, sender: "Casey",  text: "There's a z-index issue on mobile in the hero — clipped on Safari.", time: "3h" },
-    { id: 2, sender: "You",    text: "I'll take a look before merge. Good catch.", time: "2h" },
-    { id: 3, sender: "Casey",  text: "PR is approved btw — both reviewers signed off.", time: "1h" },
-    { id: 4, sender: "Jordan", text: "Merging once the z-index is sorted 🚀", time: "30m" },
-    { id: 5, sender: "You",    text: "Fixed. Go ahead and merge.", time: "10m" },
-  ],
-};
-
-const CHANNELS = [
-  { id: "general",     label: "general",     unread: 2 },
-  { id: "design",      label: "design",      unread: 0 },
-  { id: "engineering", label: "engineering", unread: 1 },
-];
-
-// ── Sub-views ─────────────────────────────────────────────────────────────────
 
 function ChannelList({
   active,
@@ -156,8 +109,8 @@ function ChatPane({
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
         </button>
-        <span className="text-[13px]" style={{ color: T_DIM }}>#</span>
-        <span className="text-[14px] font-semibold" style={{ color: T_PRI }}>{channelId}</span>
+        <span className="text-demo-md" style={{ color: T_DIM }}>#</span>
+        <span className="text-demo-lg font-semibold" style={{ color: T_PRI }}>{channelId}</span>
       </div>
 
       {/* Messages */}
@@ -174,7 +127,7 @@ function ChatPane({
               {/* Avatar slot */}
               <div className="w-7 h-7 shrink-0">
                 {!prevSame && (
-                  <div className="w-7 h-7 rounded-full overflow-hidden bg-[#2a2a2e]">
+                  <div className="w-7 h-7 rounded-full overflow-hidden bg-demo-surface">
                     <img src={AVATARS[msg.sender]} alt={msg.sender} className="w-full h-full object-cover" />
                   </div>
                 )}
@@ -213,7 +166,7 @@ function ChatPane({
           style={{ border: `1px solid ${BORDER}`, background: "rgba(255,255,255,0.03)" }}
         >
           <input
-            className="flex-1 bg-transparent text-[13px] outline-none placeholder:opacity-50"
+            className="flex-1 bg-transparent text-demo-md outline-none placeholder:opacity-50"
             style={{ color: T_PRI }}
             placeholder={`Message #${channelId}...`}
             value={inputValue}
@@ -236,7 +189,7 @@ function ChatPane({
 
 // ── Main export ───────────────────────────────────────────────────────────────
 
-export default function MobileInboxView() {
+export default function MobileInboxMock() {
   const [activeChannel, setActiveChannel] = useState<string | null>(null);
 
   if (activeChannel) {

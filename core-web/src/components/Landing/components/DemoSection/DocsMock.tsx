@@ -1,3 +1,7 @@
+import { FILES } from "./constantData";
+
+export { FILES, FOLDERS } from "./constantData";
+
 const T_PRI  = "#e8e8ea";
 const T_SEC  = "#a0a0a6";
 const T_DIM  = "#505056";
@@ -5,24 +9,6 @@ const BORDER = "rgba(255,255,255,0.06)";
 
 // ── File + content data (shared with Sidebar via export) ──────────────────────
 
-export interface FileItem {
-  id: string;
-  name: string;
-  type: "doc" | "image" | "sheet";
-  folder: string;
-  modified: string;
-}
-
-export const FILES: FileItem[] = [
-  { id: "f1", name: "Product Brief v2",  type: "doc",   folder: "Strategy",    modified: "2h ago" },
-  { id: "f2", name: "Q3 Roadmap",        type: "sheet", folder: "Strategy",    modified: "1d ago" },
-  { id: "f3", name: "Onboarding Flow",   type: "doc",   folder: "Design",      modified: "3h ago" },
-  { id: "f4", name: "Brand Assets",      type: "image", folder: "Design",      modified: "4d ago" },
-  { id: "f5", name: "Sprint 14 Notes",   type: "doc",   folder: "Engineering", modified: "30m ago" },
-  { id: "f6", name: "API Changelog",     type: "doc",   folder: "Engineering", modified: "2d ago" },
-];
-
-export const FOLDERS = ["Strategy", "Design", "Engineering"];
 
 interface DocContent {
   title: string;
@@ -45,7 +31,7 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           time-to-value for new users from 8 minutes to under 2.
         </p>
         <div>
-          <p className="text-[14px] font-semibold mb-3" style={{ color: T_PRI }}>Goals</p>
+          <p className="text-demo-lg font-semibold mb-3" style={{ color: T_PRI }}>Goals</p>
           <ul className="space-y-1.5">
             {["Redesign onboarding to feel instant and guided", "Ship AI chat with email + calendar context", "Reduce dashboard load time by 40%", "Improve mobile responsiveness across all views"].map(item => (
               <li key={item} className="flex items-start gap-2 text-[13.5px]" style={{ color: T_SEC }}>
@@ -56,11 +42,11 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           </ul>
         </div>
         <div className="rounded-lg p-3.5" style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.18)" }}>
-          <p className="text-[12px] font-semibold mb-1" style={{ color: "#818cf8" }}>Target launch: Wednesday, Apr 9</p>
-          <p className="text-[12px]" style={{ color: T_DIM }}>QA signed off. Design assets merged. Engineering green.</p>
+          <p className="text-demo-sm font-semibold mb-1" style={{ color: "#818cf8" }}>Target launch: Wednesday, Apr 9</p>
+          <p className="text-demo-sm" style={{ color: T_DIM }}>QA signed off. Design assets merged. Engineering green.</p>
         </div>
         <div>
-          <p className="text-[14px] font-semibold mb-3" style={{ color: T_PRI }}>Success metrics</p>
+          <p className="text-demo-lg font-semibold mb-3" style={{ color: T_PRI }}>Success metrics</p>
           <div className="space-y-2">
             {[
               { label: "Activation rate", value: "62%", target: "→ 80%" },
@@ -86,7 +72,7 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           Q3 planning doc covering the major bets for July–September. Focuses on growth, retention, and the public API launch.
         </p>
         <div>
-          <p className="text-[14px] font-semibold mb-3" style={{ color: T_PRI }}>Q3 Themes</p>
+          <p className="text-demo-lg font-semibold mb-3" style={{ color: T_PRI }}>Q3 Themes</p>
           <div className="space-y-2">
             {[
               { theme: "Public API", status: "In progress", color: "#6366f1" },
@@ -96,7 +82,7 @@ const DOC_CONTENTS: Record<string, DocContent> = {
             ].map(r => (
               <div key={r.theme} className="flex items-center justify-between rounded-md px-3 py-2" style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${BORDER}` }}>
                 <span className="text-[12.5px]" style={{ color: T_SEC }}>{r.theme}</span>
-                <span className="text-[11px] font-medium px-2 py-0.5 rounded" style={{ background: `${r.color}18`, color: r.color }}>{r.status}</span>
+                <span className="text-demo-xs font-medium px-2 py-0.5 rounded" style={{ background: `${r.color}18`, color: r.color }}>{r.status}</span>
               </div>
             ))}
           </div>
@@ -114,7 +100,7 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           introduces contextual empty states so users see value immediately after sign-up.
         </p>
         <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
-          <div className="h-[120px] flex items-center justify-center" style={{ background: "rgba(34,211,238,0.06)" }}>
+          <div className="h-30 flex items-center justify-center" style={{ background: "rgba(34,211,238,0.06)" }}>
             <div className="flex items-center gap-3 opacity-40">
               <div className="w-12 h-12 rounded-lg" style={{ background: "rgba(34,211,238,0.3)" }} />
               <div className="space-y-2">
@@ -124,11 +110,11 @@ const DOC_CONTENTS: Record<string, DocContent> = {
             </div>
           </div>
           <div className="px-3 py-2" style={{ borderTop: `1px solid ${BORDER}` }}>
-            <span className="text-[11px]" style={{ color: T_DIM }}>Figma — Onboarding v2 screens</span>
+            <span className="text-demo-xs" style={{ color: T_DIM }}>Figma — Onboarding v2 screens</span>
           </div>
         </div>
         <div>
-          <p className="text-[14px] font-semibold mb-3" style={{ color: T_PRI }}>Changes in this version</p>
+          <p className="text-demo-lg font-semibold mb-3" style={{ color: T_PRI }}>Changes in this version</p>
           <ul className="space-y-1.5">
             {["Combined workspace + profile step into one", "Added progress indicator (4-step bar)", "New empty state illustrations by Siddhant", "Removed redundant 'invite team' gate"].map(item => (
               <li key={item} className="flex items-start gap-2 text-[13.5px]" style={{ color: T_SEC }}>
@@ -157,7 +143,7 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           ))}
         </div>
         <div>
-          <p className="text-[14px] font-semibold mb-3" style={{ color: T_PRI }}>Typography</p>
+          <p className="text-demo-lg font-semibold mb-3" style={{ color: T_PRI }}>Typography</p>
           <div className="space-y-1.5">
             {[{ name: "Geist", weight: "400 / 500 / 600 / 700", use: "UI" }, { name: "Geist Mono", weight: "400 / 500", use: "Code" }].map(t => (
               <div key={t.name} className="flex items-center justify-between text-[12.5px]">
@@ -180,7 +166,7 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           fixing the Safari z-index regression, and shipping the AI chat MVP behind a flag.
         </p>
         <div>
-          <p className="text-[14px] font-semibold mb-3" style={{ color: T_PRI }}>Completed</p>
+          <p className="text-demo-lg font-semibold mb-3" style={{ color: T_PRI }}>Completed</p>
           <div className="space-y-1.5">
             {[
               { label: "Fix email chunk sync batching",   id: "CUB-201" },
@@ -200,7 +186,7 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           </div>
         </div>
         <div>
-          <p className="text-[14px] font-semibold mb-3" style={{ color: T_PRI }}>Carry over</p>
+          <p className="text-demo-lg font-semibold mb-3" style={{ color: T_PRI }}>Carry over</p>
           <div className="space-y-1.5">
             {[
               { label: "Mobile keyboard handling in chat", id: "CUB-207" },
@@ -236,11 +222,11 @@ const DOC_CONTENTS: Record<string, DocContent> = {
           ].map(c => (
             <div key={c.version} className="rounded-md px-3 py-2.5" style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${BORDER}` }}>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-[12px] font-semibold font-mono" style={{ color: T_PRI }}>{c.version}</span>
-                <span className="text-[11px]" style={{ color: T_DIM }}>{c.date}</span>
+                <span className="text-demo-sm font-semibold font-mono" style={{ color: T_PRI }}>{c.version}</span>
+                <span className="text-demo-xs" style={{ color: T_DIM }}>{c.date}</span>
                 {c.breaking && <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded" style={{ background: "rgba(225,29,72,0.12)", color: "#f43f5e" }}>Breaking</span>}
               </div>
-              <p className="text-[12px]" style={{ color: T_SEC }}>{c.note}</p>
+              <p className="text-demo-sm" style={{ color: T_SEC }}>{c.note}</p>
             </div>
           ))}
         </div>
@@ -262,36 +248,36 @@ function getContent(id: string): DocContent {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-interface DocsViewProps {
+interface DocsMockProps {
   activeFileId: string;
 }
 
-export default function DocsView({ activeFileId }: DocsViewProps) {
+export default function DocsMock({ activeFileId }: DocsMockProps) {
   const content = getContent(activeFileId);
 
   return (
     <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
       {/* Doc header */}
       <div className="px-10 pt-9 pb-6 shrink-0" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <div className="max-w-[680px] mx-auto">
+        <div className="max-w-170 mx-auto">
           {/* Breadcrumb-style meta */}
           <div className="flex items-center gap-2 mb-5">
             <span
-              className="text-[11px] font-semibold px-2.5 py-1 rounded-md"
+              className="text-demo-xs font-semibold px-2.5 py-1 rounded-md"
               style={{ background: `${content.tagColor}18`, color: content.tagColor }}
             >
               {content.tag}
             </span>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={T_DIM} strokeWidth="2.5" strokeLinecap="round"><path d="M9 18l6-6-6-6"/></svg>
-            <span className="text-[12px]" style={{ color: T_DIM }}>{content.date}</span>
-            <span className="text-[12px]" style={{ color: T_DIM }}>·</span>
+            <span className="text-demo-sm" style={{ color: T_DIM }}>{content.date}</span>
+            <span className="text-demo-sm" style={{ color: T_DIM }}>·</span>
             <div className="flex items-center gap-1.5">
-              <div className="w-[18px] h-[18px] rounded-full bg-violet-600 flex items-center justify-center shrink-0">
+              <div className="w-4.5 h-4.5 rounded-full bg-violet-600 flex items-center justify-center shrink-0">
                 <span className="text-white font-bold" style={{ fontSize: "7.5px" }}>
                   {content.author[0]}
                 </span>
               </div>
-              <span className="text-[12px]" style={{ color: T_DIM }}>{content.author}</span>
+              <span className="text-demo-sm" style={{ color: T_DIM }}>{content.author}</span>
             </div>
           </div>
           {/* Title */}
@@ -303,7 +289,7 @@ export default function DocsView({ activeFileId }: DocsViewProps) {
 
       {/* Doc body */}
       <div className="flex-1 overflow-y-auto px-10 py-7 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: "none" }}>
-        <div className="max-w-[680px] mx-auto">
+        <div className="max-w-170 mx-auto">
           {content.body}
         </div>
       </div>
