@@ -135,12 +135,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
               {/* Logo + heading */}
               <div className="flex flex-col items-center text-center mb-10">
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-6 p-2.5"
-                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
-                >
-                  <img src="/cube-logo-white.svg" alt="Cube" className="w-full h-full object-contain opacity-90" />
-                </div>
+                <img src="/cube-logo-white.svg" alt="Cube" className="w-9 h-9 object-contain opacity-90 mb-6" />
                 <h2 className="text-[24px] font-semibold leading-[1.2] tracking-[-0.5px]" style={{ color: "#eeeef0" }}>
                   Everything your team<br />needs, in one place.
                 </h2>

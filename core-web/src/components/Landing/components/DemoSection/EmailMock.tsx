@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Paperclip } from "lucide-react";
 
 const T_PRI  = "#e8e8ea";
@@ -137,7 +137,6 @@ export default function EmailView() {
   const [activeId, setActiveId] = useState<number>(1);
   const [tone, setTone] = useState<ReplyTone>("Formal");
   const [replyOpen, setReplyOpen] = useState(false);
-  // sentReplies: maps email id → array of sent reply texts
   const [sentReplies, setSentReplies] = useState<Record<number, string[]>>({});
   const bodyEndRef = useRef<HTMLDivElement>(null);
 
@@ -145,13 +144,7 @@ export default function EmailView() {
   const currentDraft = AI_DRAFTS[active.id][tone];
   const replies = sentReplies[active.id] ?? [];
 
-  // Scroll to bottom when a reply is sent
-  useEffect(() => {
-    if (replies.length > 0) {
-      bodyEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [replies.length]);
-
+ 
   const handleToneChange = (t: ReplyTone) => {
     setTone(t);
     if (!replyOpen) setReplyOpen(true);
@@ -168,12 +161,12 @@ export default function EmailView() {
   return (
     <>
       {/* ── Thread list ── */}
-      <div className="w-[340px] shrink-0 flex flex-col" style={{ borderRight: `1px solid ${BORDER}` }}>
+      <div className="w-85 shrink-0 flex flex-col" style={{ borderRight: `1px solid ${BORDER}` }}>
 
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: `1px solid ${BORDER}` }}>
-          <span className="text-[14px] font-semibold" style={{ color: T_PRI }}>Inbox</span>
-          <span className="text-[11px] font-medium px-1.5 py-0.5 rounded" style={{ color: T_DIM, background: "rgba(255,255,255,0.06)" }}>
+          <span className="text-demo-lg font-semibold" style={{ color: T_PRI }}>Inbox</span>
+          <span className="text-demo-xs font-medium px-1.5 py-0.5 rounded" style={{ color: T_DIM, background: "rgba(255,255,255,0.06)" }}>
             {emails.filter(e => e.unread).length}
           </span>
         </div>
@@ -222,7 +215,7 @@ export default function EmailView() {
 
         {/* Title bar */}
         <div className="flex items-center justify-between px-6 py-3 shrink-0" style={{ borderBottom: `1px solid ${BORDER}` }}>
-          <span className="text-[14px] font-semibold truncate" style={{ color: T_PRI }}>
+          <span className="text-demo-lg font-semibold truncate" style={{ color: T_PRI }}>
             {active.subject}
           </span>
           <button
@@ -269,7 +262,7 @@ export default function EmailView() {
           </div>
 
           {/* Body paragraphs */}
-          <div className="space-y-3 max-w-[560px]">
+          <div className="space-y-3 max-w-140">
             {active.body.map((para, i) => (
               <p key={i} className="text-[13.5px] leading-relaxed whitespace-pre-line text-left" style={{ color: T_SEC }}>
                 {para}
@@ -279,20 +272,20 @@ export default function EmailView() {
 
           {/* Sent replies */}
           {replies.length > 0 && (
-            <div className="mt-5 space-y-3 max-w-[560px]">
+            <div className="mt-5 space-y-3 max-w-140">
               {replies.map((reply, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-[#2a2a2e] flex items-center justify-center mt-0.5">
+                  <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-demo-surface flex items-center justify-center mt-0.5">
                     <img src={ME_AVATAR} alt="You" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-1.5 mb-1.5">
-                      <span className="text-[13px] font-semibold" style={{ color: T_PRI }}>You</span>
+                      <span className="text-demo-md font-semibold" style={{ color: T_PRI }}>You</span>
                       <span style={{ color: T_DIM }}>·</span>
                       <span className="text-[11.5px]" style={{ color: T_DIM }}>just now</span>
                     </div>
                     <div
-                      className="px-3.5 py-2.5 rounded-xl text-[13px] leading-relaxed"
+                      className="px-3.5 py-2.5 rounded-xl text-demo-md leading-relaxed"
                       style={{ background: "rgba(79,70,229,0.15)", border: "1px solid rgba(99,102,241,0.25)", color: T_SEC }}
                     >
                       {reply}
@@ -310,7 +303,7 @@ export default function EmailView() {
           {/* Tone chips */}
           <div className="flex items-center gap-2 mb-2.5">
           <img src="/cube-logo-white.svg" alt="Cube" width="12" height="12" className="shrink-0 opacity-40" />
-            <span className="text-[11px]" style={{ color: T_DIM }}>Reply as</span>
+            <span className="text-demo-xs" style={{ color: T_DIM }}>Reply as</span>
             {(["Formal", "Friendly", "Brief"] as ReplyTone[]).map(t => (
               <button
                 key={t}
@@ -336,8 +329,8 @@ export default function EmailView() {
               style={{ border: `1px solid rgba(99,102,241,0.35)`, background: "rgba(255,255,255,0.03)" }}
             >
               {/* Draft text area */}
-              <div className="px-4 pt-3 pb-2 min-h-[72px]">
-                <p className="text-[13px] leading-relaxed" style={{ color: T_SEC }}>
+              <div className="px-4 pt-3 pb-2 min-h-18">
+                <p className="text-demo-md leading-relaxed" style={{ color: T_SEC }}>
                   {currentDraft}
                 </p>
               </div>
@@ -370,7 +363,7 @@ export default function EmailView() {
                 {/* Send button */}
                 <button
                   onClick={handleSend}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium cursor-pointer transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-demo-sm font-medium cursor-pointer transition-colors"
                   style={{ background: "#4f46e5", color: "#fff" }}
                   onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "#4338ca"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "#4f46e5"}
@@ -391,7 +384,7 @@ export default function EmailView() {
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = BORDER}
             >
-              <span className="flex-1 text-[13px]" style={{ color: T_DIM }}>Reply to {active.sender.split(" ")[0]}...</span>
+              <span className="flex-1 text-demo-md" style={{ color: T_DIM }}>Reply to {active.sender.split(" ")[0]}...</span>
               <div className="flex items-center gap-2">
                 <button
                   className="cursor-pointer transition-colors"

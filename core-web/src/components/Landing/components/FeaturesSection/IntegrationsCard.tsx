@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Mail, Calendar, MessageSquare, LayoutGrid, FileText, Layers } from "lucide-react";
 
 // ── Layout constants ───────────────────────────────────────────────────────
 const VW = 860;
@@ -10,11 +11,11 @@ const PADDING = 50;
 const STEP = (VH - PADDING * 2) / 4;
 
 const SOURCES = [
-  { id: "mail",     label: "Mail",     x: NODE_X, y: PADDING },
-  { id: "calendar", label: "Calendar", x: NODE_X, y: PADDING + STEP },
-  { id: "messages", label: "Messages", x: NODE_X, y: PADDING + STEP * 2 },
-  { id: "projects", label: "Projects", x: NODE_X, y: PADDING + STEP * 3 },
-  { id: "files",    label: "Files",    x: NODE_X, y: PADDING + STEP * 4 },
+  { id: "mail",     x: NODE_X, y: PADDING },
+  { id: "calendar", x: NODE_X, y: PADDING + STEP },
+  { id: "messages", x: NODE_X, y: PADDING + STEP * 2 },
+  { id: "projects", x: NODE_X, y: PADDING + STEP * 3 },
+  { id: "files",    x: NODE_X, y: PADDING + STEP * 4 },
 ];
 
 // Hub centered vertically, 2/3 across
@@ -29,60 +30,14 @@ function curvePath(src: { x: number; y: number }) {
   return `M ${src.x} ${src.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${HUB.x} ${HUB.y}`;
 }
 
-// ── Icons ─────────────────────────────────────────────────────────────────
+// ── Icon map ───────────────────────────────────────────────────────────────
 
-function MailIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2"/>
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-    </svg>
-  );
-}
-
-function CalendarIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="4" width="18" height="18" rx="2"/>
-      <path d="M16 2v4M8 2v4M3 10h18"/>
-    </svg>
-  );
-}
-
-function MessagesIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-    </svg>
-  );
-}
-
-function ProjectsIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="7" height="7" rx="1"/>
-      <rect x="14" y="3" width="7" height="7" rx="1"/>
-      <rect x="3" y="14" width="7" height="7" rx="1"/>
-      <rect x="14" y="14" width="7" height="7" rx="1"/>
-    </svg>
-  );
-}
-
-function FilesIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-      <polyline points="14 2 14 8 20 8"/>
-    </svg>
-  );
-}
-
-const ICON_MAP: Record<string, React.FC> = {
-  mail: MailIcon,
-  calendar: CalendarIcon,
-  messages: MessagesIcon,
-  projects: ProjectsIcon,
-  files: FilesIcon,
+const ICON_MAP: Record<string, React.FC<{ size?: number; color?: string; strokeWidth?: number }>> = {
+  mail:     (p) => <Mail     {...p} />,
+  calendar: (p) => <Calendar {...p} />,
+  messages: (p) => <MessageSquare {...p} />,
+  projects: (p) => <LayoutGrid   {...p} />,
+  files:    (p) => <FileText     {...p} />,
 };
 
 // ── Animated beam traveling along a path ──────────────────────────────────
@@ -147,21 +102,9 @@ function SourceNode({ node, delay }: { node: typeof SOURCES[0]; delay: number })
       {/* Icon */}
       <foreignObject x={node.x - 8} y={node.y - 8} width="16" height="16">
         <div style={{ width: 16, height: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <IconComp />
+          <IconComp size={14} color="rgba(255,255,255,0.7)" strokeWidth={1.6} />
         </div>
       </foreignObject>
-      {/* Label — left of node */}
-      <text
-        x={node.x - NW / 2 - 10}
-        y={node.y + 4.5}
-        textAnchor="end"
-        fontSize="12"
-        fill="rgba(255,255,255,0.3)"
-        fontFamily="ui-sans-serif, system-ui, sans-serif"
-        letterSpacing="0.01em"
-      >
-        {node.label}
-      </text>
     </motion.g>
   );
 }
@@ -188,26 +131,13 @@ function HubNode() {
           <img src="/cube-logo-white.svg" alt="Cube" style={{ width: 18, height: 18, opacity: 0.85 }} />
         </div>
       </foreignObject>
-      {/* Label below */}
-      <text
-        x={HUB.x}
-        y={HUB.y + 46}
-        textAnchor="middle"
-        fontSize="12"
-        fill="rgba(255,255,255,0.38)"
-        fontFamily="ui-sans-serif, system-ui, sans-serif"
-        fontWeight="500"
-        letterSpacing="0.03em"
-      >
-        Cube
-      </text>
     </motion.g>
   );
 }
 
 // ── Mobile layout — stacked pills with animated dots ─────────────────────
 
-function MobilePill({ id, label, delay }: { id: string; label: string; delay: number }) {
+function MobilePill({ id, delay }: { id: string; delay: number }) {
   const IconComp = ICON_MAP[id];
   return (
     <motion.div
@@ -217,8 +147,7 @@ function MobilePill({ id, label, delay }: { id: string; label: string; delay: nu
       transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
       className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-white/[0.07] bg-white/[0.03]"
     >
-      <IconComp />
-      <span className="text-[13px] font-medium text-white/45">{label}</span>
+      <IconComp size={14} color="rgba(255,255,255,0.7)" strokeWidth={1.6} />
       {/* Animated activity dot */}
       <motion.span
         className="ml-auto w-1.5 h-1.5 rounded-full bg-white/20 shrink-0"
@@ -243,10 +172,7 @@ export default function IntegrationsCard() {
       {/* Header */}
       <div className="flex items-start gap-3 mb-8">
         <div className="mt-0.5 w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
+          <Layers size={15} color="white" strokeWidth={2} />
         </div>
         <div>
           <h3 className="text-[17px] font-semibold tracking-[-0.3px] text-[#f0f0f0]">Everything flows into one place</h3>
@@ -259,7 +185,7 @@ export default function IntegrationsCard() {
       {/* Mobile */}
       <div className="md:hidden space-y-2 py-4">
         {SOURCES.map((s, i) => (
-          <MobilePill key={s.id} id={s.id} label={s.label} delay={i * 0.07} />
+          <MobilePill key={s.id} id={s.id} delay={i * 0.07} />
         ))}
         <div className="flex justify-center pt-3">
           <motion.div
@@ -270,7 +196,6 @@ export default function IntegrationsCard() {
             className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/[0.14] bg-white/[0.06]"
           >
             <img src="/cube-logo-white.svg" alt="Cube" className="w-4 h-4 opacity-90" />
-            <span className="text-[13px] font-semibold text-white/75">Cube</span>
           </motion.div>
         </div>
       </div>
