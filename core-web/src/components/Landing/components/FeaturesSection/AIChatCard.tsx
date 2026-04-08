@@ -339,17 +339,12 @@ export default function AIChatCard() {
           {/* Prompt box — absolutely centered over the card grid */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div
-              className="pointer-events-auto w-[220px] rounded-2xl border border-white/[0.10] bg-[#1a1b1e]/95 backdrop-blur-xl"
+              className="pointer-events-auto w-[220px] rounded-2xl border-2 border-white/[0.05] bg-[#1a1b1e]/95 backdrop-blur-xl"
               style={{
                 boxShadow: phase === "result" ? "0 16px 48px rgba(0,0,0,0.65)" : "0 6px 24px rgba(0,0,0,0.5)",
                 transition: "box-shadow 400ms",
               }}
             >
-              <div className="flex items-center gap-2 px-3 pt-3 pb-2 border-b border-white/[0.05]">
-                <img src="/cube-logo-white.svg" alt="Cube" className="w-2.5 h-2.5 opacity-50" />
-                <span className="text-[10.5px] font-medium text-[#505058]">Cube AI</span>
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              </div>
               <div className="relative p-3 pb-10 min-h-[68px]">
                 <p className="text-[12px] leading-relaxed text-[#e0e0e4] font-medium whitespace-pre-wrap">
                   {typedPrompt}
@@ -380,20 +375,15 @@ export default function AIChatCard() {
 
       {/* ── Desktop layout ── */}
       <div className="hidden md:flex items-center justify-center py-8 px-4">
-        <div className="relative w-full max-w-[940px] h-[380px]">
+        <div className="relative w-full max-w-[900px] h-[450px]">
 
           {/* Scattered action cards — absolute positioned */}
           {[
-            // top-left
-            { index: 0, cls: "top-0 left-0" },
-            // top-center
-            { index: 1, cls: "top-0 left-1/2 -translate-x-1/2" },
-            // top-right
-            { index: 2, cls: "top-0 right-0" },
-            // bottom-left
-            { index: 3, cls: "bottom-0 left-8" },
-            // bottom-right
-            { index: 4, cls: "bottom-0 right-8" },
+            { index: 0, cls: "top-8 left-12" },
+            { index: 1, cls: "top-[-20px] left-1/2 -translate-x-1/2" },
+            { index: 2, cls: "top-0 right-12" },
+            { index: 3, cls: "bottom-20 left-64" },
+            { index: 4, cls: "bottom-20 right-32" },
           ].map(({ index, cls }) => {
             const action   = AI_CHAT_ACTIONS[index];
             const isActive = action.key === step.activeCard && phase !== "typing";
@@ -405,22 +395,17 @@ export default function AIChatCard() {
             );
           })}
 
-          {/* Prompt box — centered */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-[300px]">
+          {/* Prompt box — centered, sits above center like reference */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full z-40 w-[360px]">
             <div
-              className="rounded-2xl border border-white/[0.08] bg-[#1a1b1e]/90 backdrop-blur-xl transition-shadow duration-500"
+              className="rounded-2xl border-2 border-white/[0.05] bg-[#1a1b1e]/95 backdrop-blur-xl transition-shadow duration-500"
               style={{
                 boxShadow: phase === "result"
                   ? "0 16px 48px rgba(0,0,0,0.6)"
                   : "0 4px 16px rgba(0,0,0,0.4)",
               }}
             >
-              <div className="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-white/[0.05]">
-                <img src="/cube-logo-white.svg" alt="Cube" className="w-3 h-3 opacity-50" />
-                <span className="text-[11px] font-medium text-[#505058]">Cube AI</span>
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              </div>
-              <div className="relative min-h-[96px] p-4 pb-12">
+              <div className="relative min-h-[120px] p-4 pb-12">
                 <p className="text-[14px] leading-relaxed text-[#e0e0e4] font-medium whitespace-pre-wrap">
                   {typedPrompt}
                   {phase === "typing" && (
