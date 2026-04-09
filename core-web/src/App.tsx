@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -31,6 +31,10 @@ const ShareLinkResolver = lazy(() => import("./components/ShareLinkResolver"));
 const Sidebar = lazy(() => import("./components/Sidebar/Sidebar"));
 const ChatPanel = lazy(() => import("./components/ChatPanel/ChatPanel"));
 const LandingPage = lazy(() => import("./components/Landing/LandingPage"));
+const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
+const TermsOfServicePage = lazy(() => import("./pages/TermsOfServicePage"));
+const Navbar = lazy(() => import("./components/Landing/components/Navbar"));
+const SignInModal = lazy(() => import("./components/Landing/components/SignInModal"));
 const ChatView = lazy(() => import("./components/Chat/ChatView"));
 const EmailView = lazy(() => import("./components/Email/EmailView"));
 const CalendarView = lazy(() => import("./components/Calendar/CalendarView"));
@@ -200,6 +204,19 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </KeyboardNavigationProvider>
+  );
+}
+
+function LegalPageLayout({ children }: { children: React.ReactNode }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  return (
+    <>
+      <Suspense fallback={null}>
+        <Navbar onGetStarted={() => setModalOpen(true)} />
+        <SignInModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      </Suspense>
+      {children}
+    </>
   );
 }
 
@@ -383,6 +400,27 @@ function AppContent() {
     );
   }
 
+  // Public legal pages
+  if (location.pathname === "/privacy") {
+    return (
+      <LegalPageLayout>
+        <Suspense fallback={<div className="h-screen w-screen" style={{ background: "#0e0f10" }} />}>
+          <PrivacyPolicyPage />
+        </Suspense>
+      </LegalPageLayout>
+    );
+  }
+
+  if (location.pathname === "/terms") {
+    return (
+      <LegalPageLayout>
+        <Suspense fallback={<div className="h-screen w-screen" style={{ background: "#0e0f10" }} />}>
+          <TermsOfServicePage />
+        </Suspense>
+      </LegalPageLayout>
+    );
+  }
+
   // Onboarding route — full-screen, no sidebar
   if (location.pathname === "/onboarding") {
     if (!isAuthenticated && !authLoading) {
@@ -445,21 +483,10 @@ function AppContent() {
       }
       return <Navigate to="/chat" replace />;
     }
-    // If still loading and no persisted auth state, show loading
-    if (authLoading) {
-      return (
-        <div className="h-screen w-screen flex items-center justify-center bg-white">
-          <div className="w-8 h-8 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin" />
-        </div>
-      );
-    }
-    // Not authenticated, show landing page
+    // Not authenticated (or still loading) — render landing page.
+    // LandingPage owns the loading overlay and logo fly animation internally.
     return (
-      <Suspense fallback={
-        <div className="h-screen w-screen flex items-center justify-center bg-white">
-          <div className="w-8 h-8 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense fallback={<div className="h-screen w-screen" style={{ background: "#0e0f10" }} />}>
         <LandingPage />
       </Suspense>
     );
